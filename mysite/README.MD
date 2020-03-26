@@ -58,10 +58,4 @@ Part 2:
 Part 3:
 --- TBD!!!
 
-   ADMIN ACCOUNT
-----------------------
-username: mitchelllevy
-password: 3v2n9tx465
-----------------------
-
 
