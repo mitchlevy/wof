@@ -1,0 +1,28 @@
+{% extends 'fantasyworld/base.html' %}
+
+{% block content %}
+
+<body>
+<h1> Create a New Type of Fantasy League </h1>
+
+<form action="{%url 'fantasyworld:leaguetype_create' %}" method="post">
+{% csrf_token %}
+
+<label for="leaguetype_name">Name: </label>
+<input type="text" id="leaguetype_name" 
+		name="leaguetype_name"><br>
+
+<label for="leaguetype_description">Description: </label>
+<input type="text" id="leaguetype_description" 
+		name="leaguetype_description"><br>
+		
+<input type="submit" value="Create">
+</form>
+
+{% if error %}
+<p> Error: {{error}} </p>
+{% endif %}
+
+</body>
+
+{% endblock %}

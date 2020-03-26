@@ -1,0 +1,17 @@
+{% extends 'fantasyworld/base.html' %}
+
+{% block content %}
+
+{% if team_league_dict %}
+	<br>
+	<h2> My Teams </h2>
+	<ul>
+	{% for key, choice in team_league_dict.items %}
+		<li><a href = "{% url 'fantasyworld:league_home' key.league_session.league.id %}">{{choice}}</a>: <a href = "{%url 'fantasyworld:team_home' key.id %}">Team</a>
+		</li>
+	{% endfor %}
+	</ul>
+{% else %}
+{% endif %}
+
+{% endblock %}

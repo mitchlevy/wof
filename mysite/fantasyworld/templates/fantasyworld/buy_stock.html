@@ -1,0 +1,16 @@
+{% extends 'fantasyworld/base.html' %}
+
+{% block content %}
+	<br>
+	<ul><h2>Buy: {{ stock.name }}?</h2></ul>
+	<ul><p>Price: {{stock.price}}</p></ul>
+
+
+  <form method="post">
+    {% csrf_token %}
+    <ul> {{ form }}</ul>
+    <br>
+    <ul><button type="submit">Buy</button></ul>
+  </form>
+
+{% endblock %}

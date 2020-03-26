@@ -1,0 +1,32 @@
+{% extends 'fantasyworld/base.html' %}
+
+{% block content %}
+{% load static %}
+
+{% if user.is_authenticated %}
+<h1> Welcome to Fantasy World</h1>
+{% else %}
+<h1> Welcome to Fantasy World </h1>
+{% endif %}
+
+<body>
+
+{% if leaguetype_list %}
+	<p> Types of Leagues Include: </p>
+	<ul>
+	{% for leaguetype in leaguetype_list %}
+		<li><a href="{% url 'fantasyworld:leaguetype_home' leaguetype.id %}">
+		{{leaguetype.name}}</a></li>
+	{% endfor %}
+	</ul>
+{% else %}
+{% endif %}
+
+<p> Want to create a new type of league? Go here: <a href="{% url 'fantasyworld:leaguetype_create' %}"> Create League </a></p>
+
+</body>
+
+{% endblock %}
+
+<link rel="stylesheet" type="text/css" 
+href="{% static 'fantasyworld/style.css' %}">

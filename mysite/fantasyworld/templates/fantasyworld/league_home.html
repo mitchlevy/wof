@@ -1,0 +1,66 @@
+{% extends 'fantasyworld/base.html' %}
+
+{% block content %}
+
+<h1>{{league.name}}</h1>
+
+
+{% if league.is_public or not league.is_public%}
+  {% if not user_in_league %}
+
+	<a href="{% url 'fantasyworld:league_join' league.id %}">Join League </a>
+
+  {% endif%}
+{% endif %}
+
+{% if league.is_public or user_in_league %}
+<h2><u>Standings</u></h2>
+
+<table class="table table-striped" style="margin-top: 5px;">
+  <thead>
+    <tr>
+      <th scope="col">User</th>
+      <th scope="col">Rank</th>
+      <th scope="col">Stock Portfolio Value</th>
+      <th scope="col">Cash</th>
+      <th scope="col">Total Value</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for team, team_portfolio_value in team_portfolio_values.items %}
+    <tr>
+      <th> {{team.user.user}} </th>
+      <th> ?? </th>
+      <th> {{team_portfolio_value}} </th>
+      <th> {{team.budget}} </th>
+      <th> {{team.budget|add:team_portfolio_value}} </th>
+  {% endfor %}
+  </tbody>
+</table>
+
+<br>
+
+<h2><u>Stocks</u></h2>
+  {% if all_stocks %}
+  <table class="table table-striped" style="margin-top: 5px;">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for stock in all_stocks %}
+        <tr>
+        <th> {{stock.name}} </th>
+        <th> {{stock.price}} </th>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% endif %}
+
+{%endif %}
+
+{% endblock %}

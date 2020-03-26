@@ -1,0 +1,45 @@
+{% extends 'fantasyworld/base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<br>
+<h1><a href ="{% url 'fantasyworld:league_home' team.league_session.league.id %}">
+{{team.league_session.league.name}}</a></h1>
+<u><h2>Team {{user}}</h2></u>
+<h4>Portfolio Value: {{noncash_portfolio_value}} </h4>
+<h4>Cash Budget: {{team.budget}} </h4>
+
+
+  {% if teams_stocks %}
+  <table class="table table-striped" style="margin-top: 5px;">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Buy</th>
+        <th scope="col">Sell</th>
+        <th scope="col">Current Shares</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for stock, current_quantity in teams_stocks.items %}
+        <tr>
+        <th> {{stock.name}} </th>
+        <th> {{stock.price}} </th>
+        <th> <a href="{% url 'fantasyworld:buy_stock' stock.id %}">Buy</a> </th>
+        <th> <a href="{% url 'fantasyworld:sell_stock' stock.id %}">Sell</a> </th>
+        <th> {{current_quantity}} </th>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% endif %}
+
+
+{% endif %}
+
+
+{% endblock %}

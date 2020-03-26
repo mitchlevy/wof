@@ -1,0 +1,19 @@
+{% extends 'fantasyworld/base.html' %}
+
+{% block content %}
+	<br>
+	<ul><h2>Sell: {{ stock.name }}?</h2></ul>
+	<ul><p>Price: {{stock.price}}</p></ul>
+	<ul><p>Current Stock Owned: {{current_stock_quantity}}</p></ul>
+	<ul><p>Note: Your sale will be capped at your current ownership quantity, even if you enter a higher number.</p></ul>
+
+
+
+  <form method="post">
+    {% csrf_token %}
+    <ul> {{ form }}</ul>
+    <br>
+    <ul><button type="submit">Sell</button></ul>
+  </form>
+
+{% endblock %}
