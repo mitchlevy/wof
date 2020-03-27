@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -126,6 +131,8 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 # Redirects
 
+LOGIN_URL = '/fantasyworld/login'
+LOGIN_URL = '/fantasyworld/logout'
 LOGIN_REDIRECT_URL = '/fantasyworld'
 LOGOUT_REDIRECT_URL = '/fantasyworld'
 

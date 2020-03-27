@@ -3,10 +3,15 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views import generic
-
+from django.template import RequestContext
 
 from .models import *
 from .forms import BuyStockForm, SellStockForm
+
+
+def handler404(request):
+	return redirect('/fantasyworld')
+
 
 def get_or_create_profile(user):
 	try:
