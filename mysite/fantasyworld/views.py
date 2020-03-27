@@ -90,9 +90,11 @@ def league_home(request, league_id):
 		raise Http404("League Does Not Exist :(")
 
 	try:
-		user_in_league = False
+		user = request.user		
+		if len(Profile.objects.filter(user=user)) == 0:
+			prof = Profile(user=user)
+			prof.save()
 
-		user = request.user
 		league_session = LeagueSession.objects.get(league=league,
 			is_current_league_session=True)
 		teams = Team.objects.filter(league_session=league_session)
@@ -223,7 +225,7 @@ def buy_stock(request, stock_id):
 	stock = Stock.objects.get(pk=stock_id)
 	profile = Profile.objects.get(user=request.user)
 	team = Team.objects.filter(user=profile, league_session=stock.league_session)[0]
-	
+
 	if request.method == 'POST':
 		form = BuyStockForm(request.POST)
 		if form.is_valid():
@@ -281,6 +283,8 @@ def signup(request):
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             login(request, user)
+            profile = Profile(user=user)
+            profile.save()
             return redirect('/fantasyworld')
         else:
             return render(request, 'fantasyworld/signup.html', {'form': form})
