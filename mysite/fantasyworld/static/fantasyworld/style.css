@@ -6,7 +6,6 @@
 
 /* Style the links inside the navigation bar */
 .topnav a {
-  float: left;
   display: block;
   color: #f2f2f2;
   text-align: center;
@@ -25,6 +24,13 @@
 .topnav a.active {
   background-color: #4CAF50;
   color: white;
+}
+
+.topnavleft a {
+  float: left;
+}
+.topnavright a {
+  float: right;
 }
 
 tbody tr:nth-child(odd) {

@@ -5,48 +5,12 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.views import generic
 from django.template import RequestContext
 
-from .models import *
-from .forms import BuyStockForm, SellStockForm
+from fantasyworld.models import *
+from fantasyworld.forms import BuyStockForm, SellStockForm
 
 
 def handler404(request):
 	return redirect('/index/')
-
-
-def get_or_create_profile(user):
-	try:
-		profile = Profile.objects.filter(user=user)[0]
-	except IndexError:
-		profile = Profile(user=user)
-		profile.save()	
-	return profile
-
-
-def buy_or_sell_stock(stock, team, quantity, 
-						bought_stock, sold_stock):
-	'''create and save the transaction'''
-	price = stock.price
-	if sold_stock:
-		max_sale_quantity = team.get_current_stock_quantity(stock)
-		if quantity > max_sale_quantity:
-			quantity = max_sale_quantity
-	if bought_stock:
-		max_purchase_quantity = team.budget / price
-		if quantity > max_purchase_quantity:
-			quantity = max_purchase_quantity
-
-	transaction = StockTransaction(team=team, stock=stock,
-									price=price, quantity=quantity,
-									bought_stock=bought_stock, 
-									sold_stock=sold_stock)
-	transaction.save()
-
-	'''update the team's budget'''
-	if bought_stock:
-		team.budget -= price*quantity
-	elif sold_stock:
-		team.budget += price*quantity
-	team.save()
 
 
 def index(request):
@@ -57,9 +21,7 @@ def index(request):
 	
 	return render(request, 'fantasyworld/index.html', context)
 
-'''
-Views corresponding to particular types of leagues
-'''
+
 def leaguetype_home(request, leaguetype_id):
 	try:
 		leaguetype = LeagueType.objects.get(pk=leaguetype_id)
@@ -118,10 +80,10 @@ def league_home(request, league_id):
 				price = stock.price
 				portfolio_value += quantity*price
 			team_portfolio_values[team] = portfolio_value
-
+			
 	except Exception as e:
 		raise Http404(e)
-
+		
 	return render(request, 'fantasyworld/league_home.html',
 		context={'league': league, 
 					'user_in_league': user_in_league,
@@ -164,7 +126,7 @@ def league_join(request, league_id):
 			new_league_session.save()
 			current_league_session = new_league_session
 
-		profile = get_or_create_profile(user)
+		profile = Profile.objects.filter(user=user)[0]
 
 		'''only one team per user per league'''
 		if Team.objects.filter(user=profile, league_session = current_league_session).count() <1:
@@ -184,22 +146,6 @@ class LeagueView(generic.ListView):
 	model = League
 	template_name = 'fantasyworld/league_detail.html'
 
-
-def profile_home(request):
-	user = request.user
-	if user.is_authenticated:
-		profile = get_or_create_profile(user)
-		teams = Team.objects.filter(user=profile)
-
-		team_league_dict = {}
-		for team in teams:
-			league = team.league_session.league
-			team_league_dict[team] = league
-
-		return render(request, 'fantasyworld/profile.html',
-			context = {'team_league_dict': team_league_dict})
-	else:
-		return redirect('/login')
 
 
 def team_home(request, team_id):
@@ -225,97 +171,3 @@ def team_home(request, team_id):
 				'noncash_portfolio_value': noncash_portfolio_value})
 
 
-def buy_stock(request, stock_id):
-
-	stock = Stock.objects.get(pk=stock_id)
-	profile = Profile.objects.get(user=request.user)
-	team = Team.objects.filter(user=profile, league_session=stock.league_session)[0]
-
-	if request.method == 'POST':
-		form = BuyStockForm(request.POST)
-		if form.is_valid():
-			quantity = form.cleaned_data['quantity']
-			buy_or_sell_stock(stock=stock, team=team, quantity=quantity,
-				bought_stock=True, sold_stock=False)
-
-			return redirect('/team/' + str(team.id))
-	else:
-		form = BuyStockForm()
-
-	return render(request, 'fantasyworld/buy_stock.html',
-		context = {'stock': stock,
-					'form': form})
-
-
-def sell_stock(request, stock_id):
-
-	stock = Stock.objects.get(pk=stock_id)
-	profile = Profile.objects.get(user=request.user)
-	team = Team.objects.filter(user=profile, league_session=stock.league_session)[0]
-
-	if request.method == 'POST':
-		form = SellStockForm(request.POST)
-		if form.is_valid():
-			quantity = form.cleaned_data['quantity']
-			buy_or_sell_stock(stock=stock, team=team, quantity=quantity,
-				bought_stock=False, sold_stock=True)
-			return redirect('/team/' + str(team.id))
-	else:
-		form = SellStockForm()
-
-	return render(request, 'fantasyworld/sell_stock.html',
-		context = {'stock': stock,
-					'current_stock_quantity': team.get_current_stock_quantity(stock),
-					'form': form})
-
-'''
-Users Views
-'''
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-
-def signup(request):
-    if request.user.is_authenticated:
-        return redirect('/fantasyworld')
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            profile = Profile(user=user)
-            profile.save()
-            return redirect('')
-        else:
-            return render(request, 'fantasyworld/signup.html', {'form': form})
-    else:
-        form = UserCreationForm()
-        return render(request, 'fantasyworld/signup.html', {'form': form})
-
-
-def signin(request):
-    if request.user.is_authenticated:
-        return redirect('/fantasyworld')
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('/index/')
-        else:
-            form = AuthenticationForm(request.POST)
-            return render(request, 'fantasyworld/signin.html', {'form': form})
-    else:
-        form = AuthenticationForm()
-        return render(request, 'fantasyworld/signin.html', {'form': form})
-
-
-def signout(request):
-    logout(request)
-    return HttpResponseRedirect('/index/')

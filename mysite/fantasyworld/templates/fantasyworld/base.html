@@ -8,17 +8,19 @@
 
     </head>
 
-    <div class="topnav">
+    <div class="topnavleft topnav">
         <a href="{% url 'fantasyworld:index'%}">FW Home</a>
-
-        {% if user.is_authenticated %}
-        <a href="{% url 'fantasyworld:profile'%}">My Page </a>
-        <a href="{% url 'fantasyworld:logout'%}">Sign Out</a>
-        {% else %}
-        <a href="{% url 'fantasyworld:login'%}">Sign In </a>
-        {% endif %}
-
+            {% if user.is_authenticated %}
+            <a href="{% url 'fantasyworld:profile'%}">My Page </a>
+            <div class="topnavright topnav">
+                <a href="{% url 'fantasyworld:logout'%}">Sign Out</a>
+                {% else %}
+                <a href="{% url 'fantasyworld:login'%}">Sign In </a>
+            </div>
+            {% endif %}
+        </div>
     </div>
+
 
     <main>
     	{% block content %}
