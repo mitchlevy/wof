@@ -2,38 +2,58 @@
 
 {% block content %}
 
-<h1> Home for {{ leaguetype.name }} Leagues </h1>
+<h1>Fantasy {{ leaguetype.name }}</h1>
 
-<h3> Scoring Maintained By: Fantasy World </h3>
 
-<p>  Number of Public Leagues:  {{leagues.count}}</p>
-<p>  Number of Private Leagues:  {{leagues.count}}</p>
-<p>  Number of Players:  </p>
-<br>
 
-<h3> Current Public Leagues </h3>
+<h3> Public Leagues </h3>
 
 
 <table class="table table-striped" style="margin-top: 5px;">
   <thead>
     <tr>
-      <th scope="col">League Name</th>
+      <th scope="col">League </th>
       <th scope="col">Commissioner</th>
       <th scope="col">Number of Teams</th>
     </tr>
   </thead>
   <tbody>
     {% for league in leagues %}
-      <tr>
-      <th> <a href ="{% url 'fantasyworld:league_home' league.id %}">{{league.name}}</th>
-      <th> Me </th>
-      <th> 0 </th>
-      </tr>
+      {% if league.is_public %}
+        <tr>
+        <th> <a href ="{% url 'fantasyworld:league_home' league.id %}">{{league.name}}</th>
+        <th> Me </th>
+        <th> 0 </th>
+        </tr>
+      {% endif %}
     {% endfor %}
   </tbody>
 </table>
 
 <br>
+
+<h3> Private Leagues </h3>
+
+<table class="table table-striped" style="margin-top: 5px;">
+  <thead>
+    <tr>
+      <th scope="col">League </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for league in leagues %}
+      {% if not league.is_public %}
+        <tr>
+        <th> <a href ="{% url 'fantasyworld:league_home' league.id %}">{{league.name}}</th>
+
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+<br>
+
 
 <a href= "{% url 'fantasyworld:league_create' leaguetype.id %}"> Create a New League </a>
 <br>

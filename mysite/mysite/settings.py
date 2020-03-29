@@ -130,9 +130,9 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 # Redirects
 
-LOGIN_URL = '/fantasyworld/login'
-LOGIN_URL = '/fantasyworld/logout'
-LOGIN_REDIRECT_URL = '/fantasyworld'
-LOGOUT_REDIRECT_URL = '/fantasyworld'
+LOGIN_URL = '/login'
+LOGIN_URL = '/logout'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 django_heroku.settings(locals())

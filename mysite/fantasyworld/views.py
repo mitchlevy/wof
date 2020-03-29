@@ -10,7 +10,7 @@ from .forms import BuyStockForm, SellStockForm
 
 
 def handler404(request):
-	return redirect('/fantasyworld')
+	return redirect('/index/')
 
 
 def get_or_create_profile(user):
@@ -177,7 +177,7 @@ def league_join(request, league_id):
 			args=(league_id,)))
 
 	else:
-		return redirect('/fantasyworld/login')
+		return redirect('/login')
 
 
 class LeagueView(generic.ListView):
@@ -199,7 +199,7 @@ def profile_home(request):
 		return render(request, 'fantasyworld/profile.html',
 			context = {'team_league_dict': team_league_dict})
 	else:
-		return redirect('/fantasyworld/login')
+		return redirect('/login')
 
 
 def team_home(request, team_id):
@@ -238,7 +238,7 @@ def buy_stock(request, stock_id):
 			buy_or_sell_stock(stock=stock, team=team, quantity=quantity,
 				bought_stock=True, sold_stock=False)
 
-			return redirect('/fantasyworld/team/' + str(team.id))
+			return redirect('/team/' + str(team.id))
 	else:
 		form = BuyStockForm()
 
@@ -259,7 +259,7 @@ def sell_stock(request, stock_id):
 			quantity = form.cleaned_data['quantity']
 			buy_or_sell_stock(stock=stock, team=team, quantity=quantity,
 				bought_stock=False, sold_stock=True)
-			return redirect('/fantasyworld/team/' + str(team.id))
+			return redirect('/team/' + str(team.id))
 	else:
 		form = SellStockForm()
 
@@ -290,7 +290,7 @@ def signup(request):
             login(request, user)
             profile = Profile(user=user)
             profile.save()
-            return redirect('/fantasyworld')
+            return redirect('')
         else:
             return render(request, 'fantasyworld/signup.html', {'form': form})
     else:
@@ -307,7 +307,7 @@ def signin(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/fantasyworld')
+            return redirect('/index/')
         else:
             form = AuthenticationForm(request.POST)
             return render(request, 'fantasyworld/signin.html', {'form': form})
@@ -318,4 +318,4 @@ def signin(request):
 
 def signout(request):
     logout(request)
-    return redirect('/fantasyworld')
+    return HttpResponseRedirect('/index/')
