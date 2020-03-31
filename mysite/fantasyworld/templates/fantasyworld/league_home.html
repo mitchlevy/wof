@@ -2,6 +2,16 @@
 
 {% block content %}
 
+<div class="secondnavleft secondnav">
+    <a href="#">My Team</a>
+    {% if user.is_authenticated %}
+      <a href="#">Standings </a>
+    {% endif %}
+      <div class="secondnavright secondnav">
+        <a href="#">Commissioner Tools </a>
+      </div>
+    </div>
+</div>
 
 <h1>{{league.name}}</h1>
 
