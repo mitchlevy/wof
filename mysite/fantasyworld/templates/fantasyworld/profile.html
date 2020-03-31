@@ -4,12 +4,27 @@
 
 {% if team_league_dict %}
 	<br>
-	<h2> My Teams </h2>
-	<ul>
-	{% for key, choice in team_league_dict.items %}
-		<li><a href = "{% url 'fantasyworld:league_home' key.league_session.league.id %}">{{choice}}</a>: <a href = "{%url 'fantasyworld:team_home' key.id %}">Team</a>
-		</li>
-	{% endfor %}
+	<h1> My Teams </h1>
+
+	<table class="table table-striped" style="margin-top: 5px;">
+		<thead>
+			<tr>
+				<th scope="col">Team</th>
+				<th scope="col">League</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			{% for team, league in team_league_dict.items %}
+			<tr>
+
+				<th> <a href = "{% url 'fantasyworld:team_home' team.id %}">{{team.team_name}} </th>
+
+				<th> <a href = "{% url 'fantasyworld:league_home' team.league_session.league.id %}"> {{league}} </th>
+			</tr>
+			{% endfor %}
+		</tbody>
+		</table>
 	</ul>
 {% else %}
 {% endif %}

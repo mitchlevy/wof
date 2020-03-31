@@ -1,8 +1,7 @@
-from django.urls import path
-
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
-
 from fantasyworld import views
+
 
 app_name = 'fantasyworld'
 urlpatterns = [
@@ -40,5 +39,13 @@ urlpatterns = [
 	path('logout', auth_views.LogoutView.as_view(),
 		name='logout'),
 
+    path('social-auth/', include('social_django.urls', namespace='social')),
+    # Note: the problem with this is that the app_name is set to fantasyworld, thus
+    # the namespaces is effectively fantasyworld:social, but the package relies on
+    # the namespace being just 'social'
+    # could solve by either (1) move all views to the fantasyworld namespace, or
+    # (2) creating a new app
+    # but this is a whole mess because it means migrating my whole user view/model/flow
+    # or (3) editing the package itself
 ]
 

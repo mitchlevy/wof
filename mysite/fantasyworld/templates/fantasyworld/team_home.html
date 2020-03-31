@@ -5,13 +5,28 @@
 {% if user.is_authenticated %}
 
 <br>
-<h1><a href ="{% url 'fantasyworld:league_home' team.league_session.league.id %}">
-{{team.league_session.league.name}}</a></h1>
-<u><h2>Team {{user}}</h2></u>
-<h4>Portfolio Value: {{noncash_portfolio_value}} </h4>
-<h4>Cash Budget: {{team.budget}} </h4>
 
+<h1>Team {{user}}</h1>
+<h6><a href ="{% url 'fantasyworld:league_home' team.league_session.league.id %}">
+{{team.league_session.league.name}}</a></h6>
+<br>
+  <table class="table table-striped" style="margin-top: 5px;">
+  	<thead>
+  		<th scope="col">Cash </th>
+  		<th scope="col">{{team.budget}}</th>
+  	</thead>
+  	<thead>
+  		<th scope="col">Portfolio Value </th>
+  		<th scope="col">{{noncash_portfolio_value}}</th>
+  	</thead>
+  	<thead>
+  		<th scope="col">Current Rank </th>
+  		<th scope="col">1/2</th>
+  	</thead>
+  </table>
+  <br>
 
+ 	<h3> Portfolio </h3>
   {% if teams_stocks %}
   <table class="table table-striped" style="margin-top: 5px;">
     <thead>

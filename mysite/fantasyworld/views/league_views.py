@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views import generic
 from django.template import RequestContext
+from django.shortcuts import render, redirect
+
 
 from fantasyworld.models import *
 from fantasyworld.forms import BuyStockForm, SellStockForm
@@ -80,10 +82,10 @@ def league_home(request, league_id):
 				price = stock.price
 				portfolio_value += quantity*price
 			team_portfolio_values[team] = portfolio_value
-			
+
 	except Exception as e:
 		raise Http404(e)
-		
+
 	return render(request, 'fantasyworld/league_home.html',
 		context={'league': league, 
 					'user_in_league': user_in_league,

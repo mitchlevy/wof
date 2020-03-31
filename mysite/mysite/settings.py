@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'fantasyworld.apps.FantasyworldConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'fantasyworld.apps.FantasyworldConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -72,8 +73,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.facebook.FacebookOAuth2',
 ]
 
 # Database
@@ -127,11 +131,19 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
+SOCIAL_AUTH_URL_NAMESPACE = 'fantasyworld:social'
+
+SOCIAL_AUTH_FACEBOOK_KEY = "529887494604535"
+SOCIAL_AUTH_FACEBOOK_SECRET = "cb32e2965ed3c572d5a8e1612d02ecf4"
+SOCIAL_AUTH_FACEBOOK_APP_NAMESPACE = 'social'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
+
 
 # Redirects
 
-LOGIN_URL = '/login'
-LOGIN_URL = '/logout'
+LOGIN_URL = 'login'
+LOGIN_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
