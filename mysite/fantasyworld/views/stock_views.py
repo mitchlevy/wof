@@ -80,3 +80,9 @@ def sell_stock(request, stock_id):
 		context = {'stock': stock,
 					'current_stock_quantity': team.get_current_stock_quantity(stock),
 					'form': form})
+
+def stock_detail(request, stock_id):
+	stock = Stock.objects.get(pk=stock_id)
+
+	return render(request, 'fantasyworld/stock_detail.html',
+		context = {'stock': stock})

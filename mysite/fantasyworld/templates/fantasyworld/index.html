@@ -1,28 +1,47 @@
-{% extends 'fantasyworld/base.html' %}
+{% extends 'fantasyworld/bases/base.html' %}
 
 {% block content %}
 {% load static %}
 
 {% if user.is_authenticated %}
-<h1> Welcome to Fantasy World</h1>
-{% else %}
-<h1> Welcome to Fantasy World </h1>
+<h1>ParaDua </h1>
+<h3>Fantasy Sports, for Everything But Sports</h3>
 {% endif %}
 
 <body>
 
-{% if leaguetype_list %}
-	<p> Types of Leagues: </p>
-	<ul>
-	{% for leaguetype in leaguetype_list %}
-		<li><a href="{% url 'fantasyworld:leaguetype_home' leaguetype.id %}">
-		{{leaguetype.name}}</a></li>
-	{% endfor %}
-	</ul>
-{% else %}
-{% endif %}
+<br>
+<p>Have you ever wished that fantasy football existed for something you cared about?  Now it does.  Whether it's politics, the bachelor, or instagram, ParaDua has a fantasy game for you (and don't worry, there are plenty of sports games as well). </p>
+<br>
+<p>Compete against your friends, celebrities, statistical models, or all comers in public and private leagues. </p>
 
-<p> Want to create a new type of league? Go here: <a href="{% url 'fantasyworld:leaguetype_create' %}"> Create League </a></p>
+<br>
+<h3>How Do I Play?</h3>
+<br>
+<p>Each team you create starts with a budget -- let's say $100 in paracash.  The aim of the game is to accumulate as much paracash as possible. </p>
+
+<p>How do you get more paracash?</p>
+
+<li>You invest in stocks, and then try to recover more than you paid. </li>
+<li>You do this via a combination of (1) reaping dividends and (2) selling the stock for more than you bought it for. </li>
+
+<br>
+<p>How do you get dividends?</p>
+<li>In each league, dividends pay out when real-world events happen. </li>
+<li>Different events might correspond to different amounts of dividends. You might get $2 in paracash for one event and $10 for another occurring.  Some might be one-time events, others might happen weekly, or a hundred times a day.</li>
+
+<br>
+<p>How are stock prices determined?</p>
+<li>Stock prices are determined dynamically.</li>
+<li>Initial prices are set based off of the total dividends we expect the stock to earn. But if people disproportionately buy the stock at that price, we'll increase the price.  If people are selling off the stock, we'll decrease the price.</li>
+<br>
+<p>Are there other rules I need to know about?</p>
+<li>Not really! Leagues have different settings about things like how much of a particular stock you can own, when you can buy and sell stock, etc.  League rules are fleshed out on league homepages. </li>
+<br>
+<br>
+<br>
+
+
 
 </body>
 

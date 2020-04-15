@@ -1,4 +1,4 @@
-
+ 
 
 .table-striped {
   min-width: 100%;
@@ -9,6 +9,10 @@ th, tb {
 }
 
 h1 {
+  text-align: center;
+}
+
+h3 {
   text-align: center;
 }
 
@@ -47,7 +51,7 @@ h1 {
 }
 
 .secondnav {
-  background-color: #4CAF50;
+  background-color: #008B8B;
   overflow: hidden;
 }
 
@@ -138,4 +142,14 @@ img {
 .btn a, .btn a:hover {
   color: white;
   text-decoration: none ;
+}
+
+.sublist {
+  list-style-type: square;
+  margin-left: 1em;
+}
+
+.subsublist {
+  list-style-type: circle;
+  margin-left: 2em;
 }

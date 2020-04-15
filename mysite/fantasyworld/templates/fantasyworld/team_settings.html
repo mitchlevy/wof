@@ -1,0 +1,14 @@
+{% extends 'fantasyworld/bases/teampage_header.html' %}
+
+{% block teampage_header %}
+
+
+<h1> Team Settings </h1>
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <br>
+    <button type="submit">Update</button>
+</form>
+
+{% endblock %}

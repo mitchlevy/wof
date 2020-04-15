@@ -1,0 +1,40 @@
+{% extends 'fantasyworld/bases/teampage_header.html' %}
+
+{% block teampage_header %}
+
+
+<h1>{{league.name}}</h1>
+
+{% if league.is_public or not league.is_public%}
+  {% if not user_in_league %}
+
+	<a href="{% url 'fantasyworld:league_join' league.id %}">Join League </a>
+
+  {% endif%}
+{% endif %}
+
+{% if league.is_public or user_in_league %}
+<h2><u>Standings</u></h2>
+
+<table class="table table-striped" style="margin-top: 5px;">
+  <thead>
+    <tr>
+      <th scope="col">Rank</th>
+      <th scope="col">Team</th>
+      <th scope="col">Total Portfolio Value</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for team, team_portfolio_value, team_rank in team_ranks %}
+    <tr>
+      <th> {{team_rank}} </th>
+      <th> <a href="{% url 'fantasyworld:team_home' team.id %}"> {{team.team_name}} </a> </th>
+      <th> {{team_portfolio_value}} </th>
+
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
+

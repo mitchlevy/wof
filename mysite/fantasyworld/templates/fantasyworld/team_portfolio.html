@@ -1,15 +1,20 @@
-{% extends 'fantasyworld/bases/base.html' %}
+{% extends 'fantasyworld/bases/teampage_header.html' %}
 
-{% block content %}
+{% block teampage_header %}
 
-{% if user.is_authenticated %}
+{% if league.is_public or not league.is_public%}
+  {% if not user_in_league %}
 
-<br>
+  <a href="{% url 'fantasyworld:league_join' league.id %}">Join League </a>
+
+  {% endif%}
+{% endif %}
+
 
 <h1>{{team.team_name}}</h1>
-<h6><a href ="{% url 'fantasyworld:league_home' team.league_session.league.id %}">
-{{team.league_session.league.name}}</a></h6>
-<br>
+
+ <h3> My Portfolio </h3>
+ <br>
   <table class="table table-striped" style="margin-top: 5px;">
   	<thead>
   		<th scope="col">Cash </th>
@@ -25,36 +30,34 @@
   	</thead>
   </table>
   <br>
-
- 	<h3> Portfolio </h3>
+  
   {% if teams_stocks %}
   <table class="table table-striped" style="margin-top: 5px;">
     <thead>
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
-        <th scope="col">Buy</th>
-        <th scope="col">Sell</th>
+        <th scope="col">Type </th>
         <th scope="col">Current Shares</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       {% for stock, current_quantity in teams_stocks.items %}
         <tr>
-        <th> <a href="{% url 'fantasyworld:stock_detail' stock.id %}"> {{stock.name}} </a> </th>
+        <th> <a href="{% url 'fantasyworld:stock_detail' stock.id %}">{{stock.name}} </a></th>
         <th> {{stock.price}} </th>
+        <th> {{stock.stock_type}} </th>
+        <th> {{current_quantity}} </th>
         <th> <a href="{% url 'fantasyworld:buy_stock' stock.id %}">Buy</a> </th>
         <th> <a href="{% url 'fantasyworld:sell_stock' stock.id %}">Sell</a> </th>
-        <th> {{current_quantity}} </th>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 
   {% endif %}
-
-
-{% endif %}
 
 
 {% endblock %}

@@ -6,6 +6,8 @@ from fantasyworld import views
 app_name = 'fantasyworld'
 urlpatterns = [
 	path('', views.index, name='index'),
+	path('league-categories', views.league_categories, 
+		name='league_categories'),
 
 	path('leaguetype/<int:leaguetype_id>/', views.leaguetype_home, 
 		name='leaguetype_home'),
@@ -21,16 +23,29 @@ urlpatterns = [
 		name='league_home'),
 	path('league/<int:league_id>/join/', views.league_join,
 		name='league_join'),
+	
+	path('league/<int:league_id>/commissioner-tools/', views.commissioner_tools,
+		name='commissioner_tools'),
 
 	path('league/buy/<int:stock_id>/', views.buy_stock,
 		name='buy_stock'),
 	path('league/sell/<int:stock_id>/', views.sell_stock,
 		name='sell_stock'),
 
+	path('league/stock_detail/<int:stock_id>', views.stock_detail,
+		name='stock_detail'),
+
 	path('profile/', views.profile_home,
 		name='profile'),
 	path('team/<int:team_id>/', views.team_home,
 		name='team_home'),
+	path('team/portfolio/<int:team_id>/', views.team_portfolio,
+		name='team_portfolio'),
+	path('team/standings/<int:team_id>/', views.team_standings,
+		name='team_standings'),
+	path('league/team-settings/<int:team_id>/', views.team_settings,
+		name='team_settings'),
+
 
 	path('signup/', views.signup,
 		name='signup'),
@@ -38,6 +53,7 @@ urlpatterns = [
 		name='login'),
 	path('logout', auth_views.LogoutView.as_view(),
 		name='logout'),
+
 
     path('social-auth/', include('social_django.urls', namespace='social')),
     # Note: the problem with this is that the app_name is set to fantasyworld, thus

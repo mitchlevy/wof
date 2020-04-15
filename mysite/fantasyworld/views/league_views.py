@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 
 
 from fantasyworld.models import *
-from fantasyworld.forms import BuyStockForm, SellStockForm
+from fantasyworld.forms import *
 
 
 def handler404(request):
@@ -69,19 +69,25 @@ def league_home(request, league_id):
 		teams = Team.objects.filter(league_session=league_session)
 
 		if user.is_authenticated:
-			user_in_league = Team.objects.filter(league_session = league_session,
-				user=Profile.objects.get(user=user)).exists()
+			team = Team.objects.filter(league_session = league_session,
+				user=Profile.objects.get(user=user))
+			user_in_league = team.exists()
+			user_is_commissioner = team[0].is_commissioner
+			users_team_id = team[0].id
 
 		all_stocks = Stock.objects.filter(league_session=league_session)
 
-		team_portfolio_values = {}
+		team_portfolio_values = []
 		for team in teams:
-			portfolio_value = 0
-			for stock in all_stocks:
-				quantity = team.get_current_stock_quantity(stock)
-				price = stock.price
-				portfolio_value += quantity*price
-			team_portfolio_values[team] = portfolio_value
+			portfolio_value = team.get_current_portfolio_value()
+			team_portfolio_values.append((team, portfolio_value))
+
+		team_portfolio_values.sort(key=lambda x: x[1], reverse=True)
+		team_ranks = []
+		i=1
+		for team, portfolio_value in team_portfolio_values:
+			team_ranks.append((team, portfolio_value, i))
+			i += 1
 
 	except Exception as e:
 		raise Http404(e)
@@ -89,7 +95,9 @@ def league_home(request, league_id):
 	return render(request, 'fantasyworld/league_home.html',
 		context={'league': league, 
 					'user_in_league': user_in_league,
-					'team_portfolio_values': team_portfolio_values,
+					'users_team_id': users_team_id,
+					'user_is_commissioner': user_is_commissioner,
+					'team_ranks': team_ranks,
 					'all_stocks': all_stocks})
 
 
@@ -172,4 +180,146 @@ def team_home(request, team_id):
 				'teams_stocks': teams_stocks,
 				'noncash_portfolio_value': noncash_portfolio_value})
 
+def team_settings(request, team_id):
+	league_id = Team.objects.get(pk=team_id).league_session.league.id
 
+	return render(request, 'fantasyworld/team_settings.html',
+		context ={'league_id': league_id})
+
+
+def commissioner_tools(request, league_id):
+	'''
+	First, check to ensure user is logged in and commissioner,
+		and redirect user if not
+	'''
+	user = request.user
+	if user.is_authenticated:
+		try:
+			team = Team.objects.get(league_session=LeagueSession.objects.get(
+				league = League.objects.get(pk=league_id)),
+				user=Profile.objects.get(user=user))
+			user_is_commissioner = team.is_commissioner
+
+		except Exception as e:
+			raise Http404(e)
+
+	else:
+		return HttpResponseRedirect(reverse('fantasyworld:league_home',
+			args=(league_id,)))
+
+	if not user_is_commissioner:
+		return HttpResponseRedirect(reverse('fantasyworld:league_home',
+			args=(league_id,)))
+	'''
+	'''
+
+	if request.method == 'POST':
+		form = CommissionerToolsForm(request.POST)
+		if form.is_valid():
+			league_name = form.cleaned_data['league_name']
+
+			if len(league_name) > 0:
+				league = League.objects.get(pk=league_id)
+				league.name = league_name
+				league.save()
+
+			return HttpResponseRedirect(reverse('fantasyworld:league_home',
+				args=(league_id,)))
+	else:
+		form = CommissionerToolsForm()	
+
+
+	return render(request, 'fantasyworld/commissioner_tools.html',
+		context = {'form': form,
+					'league_id': league_id})
+
+def team_portfolio(request, team_id):
+	user = request.user
+	try:
+		team = Team.objects.get(pk=team_id)
+	except Team.DoesNotExist:
+		raise Http404("Team Does Not Exist :(")
+
+	league_session = team.league_session
+	noncash_portfolio_value = 0
+
+	'''get list of all stocks available for purchase/sale'''
+	all_stocks = Stock.objects.filter(league_session=league_session)
+	teams_stocks = {}
+	for stock in all_stocks:
+		teams_stocks[stock] = team.get_current_stock_quantity(stock)
+		noncash_portfolio_value += teams_stocks[stock] * stock.price
+
+	return render(request, 'fantasyworld/team_portfolio.html',
+		context={'team': team,
+				'users_team_id': team.id,
+				'league': league_session.league,
+				'teams_stocks': teams_stocks,
+				'user_is_commissioner': team.is_commissioner,
+				'noncash_portfolio_value': noncash_portfolio_value})
+
+
+def team_standings(request, team_id):
+	user = request.user
+	try:
+		team = Team.objects.get(pk=team_id)
+	except Team.DoesNotExist:
+		raise Http404("Team Does Not Exist :(")
+
+	league_session = team.league_session
+	teams = Team.objects.filter(league_session = league_session)
+	team_portfolio_values = [(team, team.get_current_portfolio_value() + 
+								team.get_current_cash())
+								for team in teams]
+
+	team_portfolio_values.sort(key=lambda x: x[1], reverse=True)
+
+	team_ranks = []
+	i=1
+	for team, portfolio_value in team_portfolio_values:
+		team_ranks.append((team, portfolio_value, i))
+		i += 1
+
+
+	return render(request, 'fantasyworld/league_standings.html',
+		context={'team': team,
+				'users_team_id': team.id,
+				'league': league_session.league,
+				'user_is_commissioner': team.is_commissioner,
+				'team_ranks': team_ranks})
+
+
+def team_settings(request, team_id):
+	user = request.user
+	try:
+		team = Team.objects.get(pk=team_id)
+	except Team.DoesNotExist:
+		raise Http404("Team Does Not Exist :(")
+	league_session = team.league_session
+
+	if request.method == 'POST':
+		form = TeamSettingsForm(request.POST)
+		if form.is_valid():
+			team_name = form.cleaned_data['team_name']
+
+			if len(team_name) > 0:
+				team.team_name = team_name
+				team.save()
+
+			return HttpResponseRedirect(reverse('fantasyworld:league_home',
+				args=(league_session.league.id,)))
+	else:
+		form = TeamSettingsForm()		
+
+	return render(request, 'fantasyworld/team_settings.html',
+				context={'team': team,
+				'users_team_id': team.id,
+				'league': league_session.league,
+				'user_is_commissioner': team.is_commissioner,
+				'form': form})
+
+def league_categories(request):
+	return render(request, 'fantasyworld/league_categories.html')
+
+
+	

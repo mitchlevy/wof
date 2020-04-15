@@ -26,6 +26,7 @@ class LeagueType(models.Model):
 	name = models.CharField(max_length=100)
 	description = models.CharField(max_length = 500)
 	game_type = models.ManyToManyField(GameType)
+	stock_types = models.CharField(max_length=1000, null=True)
 
 	def __str__(self):
 		return self.name
@@ -122,6 +123,25 @@ class Team(models.Model):
 
 		return quantity
 
+	def get_current_cash(self):
+		return self.budget
+
+	def get_current_portfolio_value(self):
+		portfolio_value = 0
+		stock_transaction_set = self.stocktransaction_set.all()
+		for stock_transaction in stock_transaction_set:
+			stock = stock_transaction.stock
+			if stock_transaction.bought_stock:
+				quantity = stock_transaction.quantity
+			else:
+				quantity = (-1)*stock_transaction.quantity
+
+			stock_price = stock.price
+			portfolio_value += quantity*stock_price
+
+		return portfolio_value
+
+
 
 class Stock(models.Model):
 	'''
@@ -137,6 +157,16 @@ class Stock(models.Model):
 	price = models.FloatField()
 	transactions = models.ManyToManyField(Team, through = 'StockTransaction',
 		default=None)
+	description = models.CharField(max_length=1000, null=True)
+
+	stock_type = models.CharField(max_length=100, default='Generic')
+
+	def get_stock_type_choices(self):
+		inherited_stock_types = self.league_session.league.league_type.stock_types.split(',')
+		stock_types_choices = inherited_stock_types if (inherited_stock_types != ['']) else ['Generic']
+		inherited_stock_types = [x.strip() for x in inherited_stock_types]
+
+		return position_choices
 
 
 class StockTransaction(models.Model):

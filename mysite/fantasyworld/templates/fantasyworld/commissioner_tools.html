@@ -1,0 +1,14 @@
+{% extends 'fantasyworld/bases/commissionertools_header.html' %}
+
+{% block commissionertools_header %}
+
+<h1> League Settings </h1>
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <br>
+    <button type="submit">Update</button>
+</form>
+
+
+{% endblock %}
