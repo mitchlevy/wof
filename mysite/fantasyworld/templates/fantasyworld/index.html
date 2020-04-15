@@ -3,9 +3,9 @@
 {% block content %}
 {% load static %}
 
-{% if user.is_authenticated %}
 <h1>ParaDua </h1>
-<h3>Fantasy Sports, for Everything But Sports</h3>
+<h3>Fantasy Sports, for Everything But Sports*</h3>
+{% if user.is_authenticated %}
 {% endif %}
 
 <body>
@@ -14,6 +14,7 @@
 <p>Have you ever wished that fantasy football existed for something you cared about?  Now it does.  Whether it's politics, the bachelor, or instagram, ParaDua has a fantasy game for you (and don't worry, there are plenty of sports games as well). </p>
 <br>
 <p>Compete against your friends, celebrities, statistical models, or all comers in public and private leagues. </p>
+<p> *It's also for sports </p>
 
 <br>
 <h3>How Do I Play?</h3>

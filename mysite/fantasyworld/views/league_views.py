@@ -319,7 +319,12 @@ def team_settings(request, team_id):
 				'form': form})
 
 def league_categories(request):
-	return render(request, 'fantasyworld/league_categories.html')
+	league_types = LeagueType.objects.all()
+	leagues = League.objects.all()
+
+	return render(request, 'fantasyworld/league_categories.html',
+		context = {'league_types': league_types,
+					'leagues': leagues})
 
 
 	

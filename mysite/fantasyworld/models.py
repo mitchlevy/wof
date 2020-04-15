@@ -28,6 +28,9 @@ class LeagueType(models.Model):
 	game_type = models.ManyToManyField(GameType)
 	stock_types = models.CharField(max_length=1000, null=True)
 
+	meta_leaguetype = models.ForeignKey('self', blank=True, null=True,
+		on_delete = models.SET_NULL)
+
 	def __str__(self):
 		return self.name
 

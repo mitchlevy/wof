@@ -6,7 +6,21 @@
 
 <body>
 
+
+
 <br>
+
+{% for league_type in league_types %}
+<li> <a href= "{% url 'fantasyworld:leaguetype_home' league_type.id %}"> {{league_type.name}} </a> </li>
+<ul class="sublist">
+	{% for league in leagues %}
+		{% if league.league_type == league_type %}
+		<li> <a href= "{% url 'fantasyworld:league_home' league.id %}"> {{league.name}} </a> </li>
+		{% endif %}
+	{% endfor %}
+</ul>
+{% endfor %}
+
 <li>Politics</li>
 <ul class="sublist">
 	<li>American Politics</li>
