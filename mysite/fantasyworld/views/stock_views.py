@@ -38,11 +38,25 @@ def buy_or_sell_stock(stock, team, quantity,
 	team.save()
 
 
-def buy_stock(request, stock_id):
+def buy_stock(request, league_id, stock_id):
 
 	stock = Stock.objects.get(pk=stock_id)
 	profile = Profile.objects.get(user=request.user)
 	team = Team.objects.filter(user=profile, league_session=stock.league_session)[0]
+
+	'''check that stock belongs to the right league'''
+	try:
+		league = League.objects.get(id=league_id)
+		league_session = LeagueSession.objects.get(
+			league=league,
+			is_current_league_session=True)
+		if stock.league_session != league_session:
+			return HttpResponseRedirect(reverse('fantasyworld:league_home',
+				args=(league_id,)))
+	except Exception:
+		return HttpResponseRedirect(reverse('fantasyworld:league_home',
+			args=(league_id,)))
+
 
 	if request.method == 'POST':
 		form = BuyStockForm(request.POST)
@@ -60,11 +74,25 @@ def buy_stock(request, stock_id):
 					'form': form})
 
 
-def sell_stock(request, stock_id):
+def sell_stock(request, league_id, stock_id):
 
 	stock = Stock.objects.get(pk=stock_id)
 	profile = Profile.objects.get(user=request.user)
 	team = Team.objects.filter(user=profile, league_session=stock.league_session)[0]
+
+	'''check that stock belongs to the right league'''
+	try:
+		league = League.objects.get(id=league_id)
+		league_session = LeagueSession.objects.get(
+			league=league,
+			is_current_league_session=True)
+		if stock.league_session != league_session:
+			return HttpResponseRedirect(reverse('fantasyworld:league_home',
+				args=(league_id,)))
+	except Exception:
+		return HttpResponseRedirect(reverse('fantasyworld:league_home',
+			args=(league_id,)))
+
 
 	if request.method == 'POST':
 		form = SellStockForm(request.POST)

@@ -58,22 +58,27 @@ def league_home(request, league_id):
 	except League.DoesNotExist:
 		raise Http404("League Does Not Exist :(")
 
-	try:
-		user = request.user		
-		if len(Profile.objects.filter(user=user)) == 0:
-			prof = Profile(user=user)
-			prof.save()
+	'''require user to be logged in to see league'''
+	'''note: user does not have to be part of league'''
+	user = request.user
+	if not user.is_authenticated:
+		return redirect('/login')
 
+	else:
 		league_session = LeagueSession.objects.get(league=league,
 			is_current_league_session=True)
 		teams = Team.objects.filter(league_session=league_session)
 
-		if user.is_authenticated:
-			team = Team.objects.filter(league_session = league_session,
-				user=Profile.objects.get(user=user))
-			user_in_league = team.exists()
+		team = Team.objects.filter(league_session = league_session,
+			user=Profile.objects.get(user=user))
+
+		user_in_league = team.exists()
+		if user_in_league:
 			user_is_commissioner = team[0].is_commissioner
 			users_team_id = team[0].id
+		else:
+			user_is_commissioner = False
+			users_team_id = 0
 
 		all_stocks = Stock.objects.filter(league_session=league_session)
 
@@ -88,9 +93,6 @@ def league_home(request, league_id):
 		for team, portfolio_value in team_portfolio_values:
 			team_ranks.append((team, portfolio_value, i))
 			i += 1
-
-	except Exception as e:
-		raise Http404(e)
 
 	return render(request, 'fantasyworld/league_home.html',
 		context={'league': league, 
@@ -165,6 +167,8 @@ def team_home(request, team_id):
 	except Team.DoesNotExist:
 		raise Http404("Team Does Not Exist :(")
 
+	is_current_users_team = team.user.user == user
+
 	league_session = team.league_session
 	noncash_portfolio_value = 0
 
@@ -178,65 +182,18 @@ def team_home(request, team_id):
 	return render(request, 'fantasyworld/team_home.html',
 		context={'team': team,
 				'teams_stocks': teams_stocks,
-				'noncash_portfolio_value': noncash_portfolio_value})
-
-def team_settings(request, team_id):
-	league_id = Team.objects.get(pk=team_id).league_session.league.id
-
-	return render(request, 'fantasyworld/team_settings.html',
-		context ={'league_id': league_id})
+				'noncash_portfolio_value': noncash_portfolio_value,
+				'is_current_users_team': is_current_users_team})
 
 
-def commissioner_tools(request, league_id):
-	'''
-	First, check to ensure user is logged in and commissioner,
-		and redirect user if not
-	'''
-	user = request.user
-	if user.is_authenticated:
-		try:
-			team = Team.objects.get(league_session=LeagueSession.objects.get(
-				league = League.objects.get(pk=league_id)),
-				user=Profile.objects.get(user=user))
-			user_is_commissioner = team.is_commissioner
-
-		except Exception as e:
-			raise Http404(e)
-
-	else:
-		return HttpResponseRedirect(reverse('fantasyworld:league_home',
-			args=(league_id,)))
-
-	if not user_is_commissioner:
-		return HttpResponseRedirect(reverse('fantasyworld:league_home',
-			args=(league_id,)))
-	'''
-	'''
-
-	if request.method == 'POST':
-		form = CommissionerToolsForm(request.POST)
-		if form.is_valid():
-			league_name = form.cleaned_data['league_name']
-
-			if len(league_name) > 0:
-				league = League.objects.get(pk=league_id)
-				league.name = league_name
-				league.save()
-
-			return HttpResponseRedirect(reverse('fantasyworld:league_home',
-				args=(league_id,)))
-	else:
-		form = CommissionerToolsForm()	
-
-
-	return render(request, 'fantasyworld/commissioner_tools.html',
-		context = {'form': form,
-					'league_id': league_id})
 
 def team_portfolio(request, team_id):
 	user = request.user
 	try:
-		team = Team.objects.get(pk=team_id)
+		league_session = Team.objects.get(pk=team_id).league_session
+		profile = Profile.objects.filter(user=user)[0]
+		team = Team.objects.get(user=profile,
+								league_session=league_session)
 	except Team.DoesNotExist:
 		raise Http404("Team Does Not Exist :(")
 
@@ -265,6 +222,8 @@ def team_standings(request, team_id):
 		team = Team.objects.get(pk=team_id)
 	except Team.DoesNotExist:
 		raise Http404("Team Does Not Exist :(")
+	users_team_id = team.id
+	user_is_commissioner = team.is_commissioner
 
 	league_session = team.league_session
 	teams = Team.objects.filter(league_session = league_session)
@@ -283,9 +242,9 @@ def team_standings(request, team_id):
 
 	return render(request, 'fantasyworld/league_standings.html',
 		context={'team': team,
-				'users_team_id': team.id,
+				'users_team_id': users_team_id,
 				'league': league_session.league,
-				'user_is_commissioner': team.is_commissioner,
+				'user_is_commissioner': user_is_commissioner,
 				'team_ranks': team_ranks})
 
 
@@ -309,7 +268,7 @@ def team_settings(request, team_id):
 			return HttpResponseRedirect(reverse('fantasyworld:league_home',
 				args=(league_session.league.id,)))
 	else:
-		form = TeamSettingsForm()		
+		form = TeamSettingsForm()
 
 	return render(request, 'fantasyworld/team_settings.html',
 				context={'team': team,
@@ -317,6 +276,7 @@ def team_settings(request, team_id):
 				'league': league_session.league,
 				'user_is_commissioner': team.is_commissioner,
 				'form': form})
+
 
 def league_categories(request):
 	league_types = LeagueType.objects.all()

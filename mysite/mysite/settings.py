@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'fantasyworld.apps.FantasyworldConfig',
-
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

@@ -2,14 +2,6 @@
 
 {% block teampage_header %}
 
-{% if league.is_public or not league.is_public%}
-  {% if not user_in_league %}
-
-  <a href="{% url 'fantasyworld:league_join' league.id %}">Join League </a>
-
-  {% endif%}
-{% endif %}
-
 
 <h1>{{team.team_name}}</h1>
 
@@ -37,7 +29,6 @@
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
-        <th scope="col">Type </th>
         <th scope="col">Current Shares</th>
         <th scope="col"></th>
         <th scope="col"></th>
@@ -48,10 +39,9 @@
         <tr>
         <th> <a href="{% url 'fantasyworld:stock_detail' stock.id %}">{{stock.name}} </a></th>
         <th> {{stock.price}} </th>
-        <th> {{stock.stock_type}} </th>
         <th> {{current_quantity}} </th>
-        <th> <a href="{% url 'fantasyworld:buy_stock' stock.id %}">Buy</a> </th>
-        <th> <a href="{% url 'fantasyworld:sell_stock' stock.id %}">Sell</a> </th>
+        <th> <a href="{% url 'fantasyworld:buy_stock' league.id stock.id %}">Buy</a> </th>
+        <th> <a href="{% url 'fantasyworld:sell_stock' league.id stock.id %}">Sell</a> </th>
         </tr>
       {% endfor %}
     </tbody>

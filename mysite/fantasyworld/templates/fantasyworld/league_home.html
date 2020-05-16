@@ -19,20 +19,16 @@
 <table class="table table-striped" style="margin-top: 5px;">
   <thead>
     <tr>
-      <th scope="col">User</th>
+      <th scope="col">Team</th>
       <th scope="col">Rank</th>
-      <th scope="col">Stock Portfolio Value</th>
-      <th scope="col">Cash</th>
-      <th scope="col">Total Value</th>
+      <th scope="col">Portfolio Value + Cash</th>
     </tr>
   </thead>
   <tbody>
   {% for team, team_portfolio_value, team_rank in team_ranks%}
     <tr>
-      <th> <a href="{% url 'fantasyworld:team_home' team.id %}"> {{team.user.user}} </a> </th>
+      <th> <a href="{% url 'fantasyworld:team_home' team.id %}"> {{team.team_name}} </a> </th>
       <th> {{team_rank}} </th>
-      <th> {{team_portfolio_value}} </th>
-      <th> {{team.budget}} </th>
       <th> {{team.budget|add:team_portfolio_value}} </th>
   {% endfor %}
   </tbody>
@@ -47,7 +43,6 @@
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
-        <th scope="col">Type</th>
       </tr>
     </thead>
     <tbody>
@@ -55,7 +50,6 @@
         <tr>
         <th> <a href="{% url 'fantasyworld:stock_detail' stock.id %}"> {{stock.name}} </a></th>
         <th> {{stock.price}} </th>
-        <th> {{stock.stock_type}} </th>
         </tr>
       {% endfor %}
     </tbody>

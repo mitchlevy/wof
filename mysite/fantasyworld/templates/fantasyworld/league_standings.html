@@ -5,13 +5,6 @@
 
 <h1>{{league.name}}</h1>
 
-{% if league.is_public or not league.is_public%}
-  {% if not user_in_league %}
-
-	<a href="{% url 'fantasyworld:league_join' league.id %}">Join League </a>
-
-  {% endif%}
-{% endif %}
 
 {% if league.is_public or user_in_league %}
 <h2><u>Standings</u></h2>

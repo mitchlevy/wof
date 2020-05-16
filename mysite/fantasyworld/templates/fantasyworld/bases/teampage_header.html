@@ -6,12 +6,13 @@
     {% if user.is_authenticated %}
       <a href="{% url 'fantasyworld:team_portfolio' users_team_id %}">My Portfolio</a>
       <a href="{% url 'fantasyworld:team_standings' users_team_id %}">Standings</a>
-    {% endif %}
       <div class="secondnavright secondnav">
         {% if user_is_commissioner %}
           <a href="{% url 'fantasyworld:commissioner_tools' league.id %}">Commissioner Tools </a>
         {% endif %}
         <a href="{% url 'fantasyworld:team_settings' users_team_id %}">Team Settings</a>
+    {% endif %}
+
       </div>
     </div>
 </div>

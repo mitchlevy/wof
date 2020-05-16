@@ -27,9 +27,9 @@ urlpatterns = [
 	path('league/<int:league_id>/commissioner-tools/', views.commissioner_tools,
 		name='commissioner_tools'),
 
-	path('league/buy/<int:stock_id>/', views.buy_stock,
+	path('league/buy/<int:league_id>/<int:stock_id>/', views.buy_stock,
 		name='buy_stock'),
-	path('league/sell/<int:stock_id>/', views.sell_stock,
+	path('league/sell/<int:league_id>/<int:stock_id>/', views.sell_stock,
 		name='sell_stock'),
 
 	path('league/stock_detail/<int:stock_id>', views.stock_detail,

@@ -7,10 +7,15 @@
 <br>
 
 <h1>{{team.team_name}}</h1>
-<h6><a href ="{% url 'fantasyworld:league_home' team.league_session.league.id %}">
-{{team.league_session.league.name}}</a></h6>
 <br>
   <table class="table table-striped" style="margin-top: 5px;">
+    <thead>
+      <th scope="col">User </th>
+      <th scope="col">{{team.user.user}}</a></th>
+    </thead>
+      <th scope="col">League </th>
+      <th scope="col"><a href ="{% url 'fantasyworld:league_home' team.league_session.league.id %}">{{team.league_session.league.name}}</a></th>
+    </thead>
   	<thead>
   		<th scope="col">Cash </th>
   		<th scope="col">{{team.budget}}</th>
@@ -33,8 +38,6 @@
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
-        <th scope="col">Buy</th>
-        <th scope="col">Sell</th>
         <th scope="col">Current Shares</th>
       </tr>
     </thead>
@@ -43,8 +46,6 @@
         <tr>
         <th> <a href="{% url 'fantasyworld:stock_detail' stock.id %}"> {{stock.name}} </a> </th>
         <th> {{stock.price}} </th>
-        <th> <a href="{% url 'fantasyworld:buy_stock' stock.id %}">Buy</a> </th>
-        <th> <a href="{% url 'fantasyworld:sell_stock' stock.id %}">Sell</a> </th>
         <th> {{current_quantity}} </th>
         </tr>
       {% endfor %}

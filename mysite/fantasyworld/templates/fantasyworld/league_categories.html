@@ -2,16 +2,14 @@
 
 {% block content %}
 
-<h2> League Categories </h2>
-
+<h1> League Categories </h1>
 <body>
-
-
 
 <br>
 
 {% for league_type in league_types %}
 <li> <a href= "{% url 'fantasyworld:leaguetype_home' league_type.id %}"> {{league_type.name}} </a> </li>
+<!--
 <ul class="sublist">
 	{% for league in leagues %}
 		{% if league.league_type == league_type %}
@@ -19,27 +17,13 @@
 		{% endif %}
 	{% endfor %}
 </ul>
+-->
 {% endfor %}
 
 
-<li>Bachelor</li>
-<ul class="sublist">
-	<li>Bachelorette Season ??</li>
-	<li>Bachelor Listen to Your Heart</li>
-	<li>Bachlor in Paradise Season ??</li>
-	<li>Bachelor Alumni</li>
-	<li>Other</li>
-</ul>
-<li>Esports</li>
-<ul class="sublist">
-	<li>Super Smash Bros</li>
-	<ul class="subsublist">
-		<li>Melee</li>
-		<li>Brawl</li>
-		<li>4</li>
-		<li>Ultimate</li>
-	</ul>
-</ul>
+<li>Bachelor (coming soon)</li>
+<li>Esports (coming soon)</li>
+
 </body>
 
 {% endblock %}
