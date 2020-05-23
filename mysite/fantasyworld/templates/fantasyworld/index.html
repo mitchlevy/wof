@@ -3,13 +3,39 @@
 {% block content %}
 {% load static %}
 
-<h1>ParaDua </h1>
-<h3>Fantasy Sports, for Everything But Sports*</h3>
+<br>
+<h1>The Street League </h1>
+<h5>Fantasy Gambling Leagues | Compete Against the Experts, the Masses or Friends </h5>
 {% if user.is_authenticated %}
 {% endif %}
 
 <body>
 
+<div class="row">
+ 	<div class="column">
+ 		<a href="#">
+    		<img src="{% static 'images/SportsLeagues.png' %}"
+    				style="border:0px" width=100%>
+		    <figcaption>Sports</figcaption>
+    	</a>
+   	</div>
+ 	<div class="column">
+ 		<a href="#">
+    		<img src="{% static 'images/PoliticsLeagues.png' %}"
+    				style="border:0px" width=100%>
+		    <figcaption>Politics</figcaption>
+    	</a>
+   	</div>
+ 	<div class="column">
+ 		<a href="#">
+    		<img src="{% static 'images/AllLeagues.png' %}"
+    				style="border:2px" width=100%>
+		    <figcaption>All Leagues</figcaption>
+    	</a>
+	</div>
+</div>
+
+<!---
 <br>
 <p>Have you ever wished that fantasy football existed for something you cared about?  Now it does.  Whether it's politics, the bachelor, or instagram, ParaDua has a fantasy game for you (and don't worry, there are plenty of sports games as well). </p>
 <br>
@@ -42,6 +68,7 @@
 <br>
 <br>
 
+--->
 
 
 </body>

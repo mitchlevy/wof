@@ -28,8 +28,17 @@ def populate_nfl_lines():
 		league=league, 
 		is_current_league_session=True)
 
-	stocks = m.Stock.objects.filter(league_session = league_session)
+	try:
+		stock_set = m.StockSet.objects.get(league_session=league_session)	
+	except Exception:
+		stock_set = m.StockSet(name='NFL Lines', 
+			description='2020 NFL Season Win Totals')
+		stock_set.save()
+		stock_set.league_session.add(league_session)
+		stock_set.save()
 
+	stocks = m.Stock.objects.filter(stock_set = stock_set)
+	
 	for team in teams:
 		try:
 			team_stock = stocks.get(name = team)
@@ -38,7 +47,7 @@ def populate_nfl_lines():
 
 		except ObjectDoesNotExist:
 			team_stock = m.Stock(
-				league_session = league_session,
+				stock_set = stock_set,
 				name = team,
 				price = team_lines_dict[team])
 			team_stock.save()

@@ -62,8 +62,12 @@ def buy_stock(request, league_id, stock_id):
 		form = BuyStockForm(request.POST)
 		if form.is_valid():
 			quantity = form.cleaned_data['quantity']
-			buy_or_sell_stock(stock=stock, team=team, quantity=quantity,
-				bought_stock=True, sold_stock=False)
+			buy_or_sell_stock(
+				stock=stock, 
+				team=team, 
+				quantity=quantity,
+				bought_stock=True, 
+				sold_stock=False)
 
 			return redirect('/team/' + str(team.id))
 	else:
@@ -98,8 +102,12 @@ def sell_stock(request, league_id, stock_id):
 		form = SellStockForm(request.POST)
 		if form.is_valid():
 			quantity = form.cleaned_data['quantity']
-			buy_or_sell_stock(stock=stock, team=team, quantity=quantity,
-				bought_stock=False, sold_stock=True)
+			buy_or_sell_stock(
+				stock=stock, 
+				team=team, 
+				quantity=quantity,
+				bought_stock=False, 
+				sold_stock=True)
 			return redirect('/team/' + str(team.id))
 	else:
 		form = SellStockForm()
@@ -108,6 +116,8 @@ def sell_stock(request, league_id, stock_id):
 		context = {'stock': stock,
 					'current_stock_quantity': team.get_current_stock_quantity(stock),
 					'form': form})
+
+
 
 def stock_detail(request, stock_id):
 	stock = Stock.objects.get(pk=stock_id)

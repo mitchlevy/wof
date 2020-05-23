@@ -27,6 +27,7 @@ class LeagueType(models.Model):
 	description = models.CharField(max_length = 500)
 	game_type = models.ManyToManyField(GameType)
 	stock_types = models.CharField(max_length=1000, null=True)
+	how_to_play = models.CharField(max_length=3000, null=True)
 
 	meta_leaguetype = models.ForeignKey('self', blank=True, null=True,
 		on_delete = models.SET_NULL, default=None)
@@ -145,6 +146,21 @@ class Team(models.Model):
 		return portfolio_value
 
 
+class StockSet(models.Model):
+	'''
+	This is a set of stocks, which can be paired with league sessions
+	e.g., NFL Season Win Totals
+	Might need to eventually build sub/supersetting to get the right level
+	of specificity
+	'''
+	name = models.CharField(max_length=200, default="Default Stock Set")
+	description=models.CharField(max_length=1000, null=True)
+
+	league_session = models.ManyToManyField(LeagueSession, default=None)
+	superset_stockset = models.ForeignKey('self', blank=True, null=True,
+		on_delete = models.SET_NULL, default=None)
+
+
 
 class Stock(models.Model):
 	'''
@@ -155,7 +171,7 @@ class Stock(models.Model):
 		- pay a dividend
 		-
 	'''
-	league_session = models.ForeignKey(LeagueSession, on_delete = models.CASCADE)
+	stock_set = models.ForeignKey(StockSet, on_delete = models.CASCADE)
 	name = models.CharField(max_length=100,  default="Untitled")
 	price = models.FloatField()
 	transactions = models.ManyToManyField(Team, through = 'StockTransaction',
@@ -170,6 +186,7 @@ class Stock(models.Model):
 		inherited_stock_types = [x.strip() for x in inherited_stock_types]
 
 		return position_choices
+
 
 
 class StockTransaction(models.Model):

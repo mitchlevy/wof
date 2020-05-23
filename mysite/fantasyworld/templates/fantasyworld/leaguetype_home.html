@@ -4,6 +4,10 @@
 
 <h1>Fantasy {{ leaguetype.name }}</h1>
 
+<h4> How to Play: </h4>
+
+{{ leaguetype.how_to_play | safe}}
+
 
 
 <h3> Public Leagues </h3>
@@ -57,6 +61,5 @@
 
 <a href= "{% url 'fantasyworld:league_create' leaguetype.id %}"> Create a New League </a>
 <br>
-<a href="{% url 'fantasyworld:index' %}">Go Home </a>
 
 {% endblock %}

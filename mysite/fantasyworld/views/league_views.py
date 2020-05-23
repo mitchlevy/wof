@@ -80,7 +80,11 @@ def league_home(request, league_id):
 			user_is_commissioner = False
 			users_team_id = 0
 
-		all_stocks = Stock.objects.filter(league_session=league_session)
+		stock_sets = StockSet.objects.filter(league_session=league_session)
+		all_stocks = []
+		for stock_set in stock_sets:
+			stocks = Stock.objects.filter(stock_set=stock_set)
+			all_stocks += stocks
 
 		team_portfolio_values = []
 		for team in teams:
@@ -159,7 +163,6 @@ class LeagueView(generic.ListView):
 	template_name = 'fantasyworld/league_detail.html'
 
 
-
 def team_home(request, team_id):
 	user = request.user
 	try:
@@ -173,7 +176,12 @@ def team_home(request, team_id):
 	noncash_portfolio_value = 0
 
 	'''get list of all stocks available for purchase/sale'''
-	all_stocks = Stock.objects.filter(league_session=league_session)
+	stock_sets = StockSet.objects.filter(league_session=league_session)
+	all_stocks = []
+	for stock_set in stock_sets:
+		stocks = Stock.objects.filter(stock_set=stock_set)
+		all_stocks += stocks
+
 	teams_stocks = {}
 	for stock in all_stocks:
 		teams_stocks[stock] = team.get_current_stock_quantity(stock)
@@ -201,7 +209,12 @@ def team_portfolio(request, team_id):
 	noncash_portfolio_value = 0
 
 	'''get list of all stocks available for purchase/sale'''
-	all_stocks = Stock.objects.filter(league_session=league_session)
+	stock_sets = StockSet.objects.filter(league_session=league_session)
+	all_stocks = []
+	for stock_set in stock_sets:
+		stocks = Stock.objects.filter(stock_set=stock_set)
+		all_stocks += stocks
+
 	teams_stocks = {}
 	for stock in all_stocks:
 		teams_stocks[stock] = team.get_current_stock_quantity(stock)

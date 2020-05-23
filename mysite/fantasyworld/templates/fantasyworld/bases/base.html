@@ -2,43 +2,126 @@
 
 <html>
     <head>
-        <title>ParaDua</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <title>The Street League</title>
 
-        <link rel="stylesheet" href="https://unpkg.com/marx-css/css/marx.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <link rel="stylesheet" href="{% static 'fantasyworld/style.css' %}">
 
     </head>
 
-    <div class="topnavleft topnav">
-        <a href="{% url 'fantasyworld:index'%}">PD Home</a>
-        <a href="{% url 'fantasyworld:league_categories'%}">Leagues</a>
 
-            {% if user.is_authenticated %}
-                <a href="{% url 'fantasyworld:profile'%}">My Profile </a>
-                <div class="topnavright topnav">
-                    <a href="{% url 'fantasyworld:logout'%}">Sign Out</a>
+    <body>
+        <nav class="navbar navbar-expand-md fixed-top ">
+            <div class="container">
+                <img src="{% static 'images/StreetLeagueLogo.png' %}" height="100px" style="border:0px" />
+                <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse flex-column align-items-start" id="navbarCollapse">
+
+                    <ul class="navbar-nav bottom-border mb-auto mt-0">
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="{% url 'fantasyworld:index'%}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-0" href="{% url 'fantasyworld:league_categories'%}">Leagues</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-0" href="#">Blog</a>
+                        </li>
+                        <div class = "navbar-right ml-auto">
+                            {% if user.is_authenticated %}
+                            <div class="dropdown">
+                                <button class="dropbtn">{{ user }}</button>
+                                <div class="dropdown-content">
+                                    <a href="#">How to Play</a>
+                                    <a href="#">My Leagues</a>
+                                    <a href="#">My Profile</a>
+                                    <a href="{% url 'fantasyworld:logout'%}">Sign Out</a>
+                                </div>
+                            </div>
+                            {% else %}
+                            <a class="nav-link py-0" href="{% url 'fantasyworld:login'%}">Sign In</a>
+                            {% endif %}
+                        </div>
+                    </ul>
+
+                    <ul class="nav navbar-nav mb-auto mt-0">
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#">Featured</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#"></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#"></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="{% url 'fantasyworld:leaguetype_home' 7 %}">NFL Lines</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#">|</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#">NFL Props</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#">|</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#">U.S. President</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#">|</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link py-0" href="#">Freeplay</a>
+                        </li>
+                    </ul>
                 </div>
-            {% else %}
-                <a href="{% url 'fantasyworld:login'%}">Sign In </a>
-                <div class="topnavright topnav">
-                    <a href="{% url 'fantasyworld:signup'%}">Sign Up</a>
+
+
+            </div>
+        </nav>
+
+        <main>
+            <div id="super_wrapper">
+                <div id="wrapper">
+            	   {% block content %}
+            	   {% endblock %}
                 </div>
-            {% endif %}
+            </div>
+        </main>
+
+        <br>
+        <br>
+        <div class="footer flex-column">
+            <ul>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+
+            </ul>
+            <ul>
+                <a href="{% url 'fantasyworld:index'%}">Terms & Conditions</a>
+                <a href="{% url 'fantasyworld:index'%}">Privacy Policy</a>
+                <a href="{% url 'fantasyworld:index'%}">Contact Us</a>
+            </ul>
+            <ul>
+                <a style="font-size: 12px">The Street League is ...</a>
+            </ul>
         </div>
-    </div>
 
 
-    <main>
-    	{% block content %}
-    	{% endblock %}
-    </main>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
-    <div class="footer">
-        <a href="{% url 'fantasyworld:index'%}">About</a>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
-    </div>
-
-
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
 
 </html>
