@@ -15,15 +15,6 @@ def handler404(request):
 	return redirect('/index/')
 
 
-def index(request):
-	leaguetype_list = LeagueType.objects.order_by('id')
-	context = {
-		'leaguetype_list': leaguetype_list
-		}
-	
-	return render(request, 'fantasyworld/index.html', context)
-
-
 def leaguetype_home(request, leaguetype_id):
 	try:
 		leaguetype = LeagueType.objects.get(pk=leaguetype_id)
@@ -107,55 +98,121 @@ def league_home(request, league_id):
 					'all_stocks': all_stocks})
 
 
+
+def add_user_to_league(user, league_id,
+	user_is_commissioner=True):
+	'''auxillary function to add a user to a league,
+	comes up in a number of views'''
+	league_sessions = LeagueSession.objects.filter(league=league_id)
+	current_league_session = [ls for ls in league_sessions 
+								if ls.is_current_league_session][0]
+
+	profile = Profile.objects.filter(user=user)[0]
+
+	'''only one team per user per league'''
+	if Team.objects.filter(user=profile, league_session = current_league_session).count() <1:
+		team = Team.objects.create(user= profile,
+									league_session = current_league_session)
+		team.set_team_name()
+		if user_is_commissioner:
+			team.user_is_commissioner = True
+		team.save()
+
+
 def league_create(request, leaguetype_id):
-	try:
-		name = request.POST['league_name']
 
-		new_league = League(name=name, 
-			league_type=LeagueType.objects.get(pk=leaguetype_id))
-		new_league.save()
+	user = request.user
+	if user.is_authenticated:
 
-		new_league_session = LeagueSession(league=new_league)
-		new_league_session.save()
+		if request.method=='POST':
+			form = CreateLeagueForm(request.POST)
 
-		return HttpResponseRedirect(reverse('fantasyworld:league_home',
-			args=(new_league.id,)))
-	except MultiValueDictKeyError:
-		return render(request, 
-			'fantasyworld/league_create.html',
-			context={'leaguetype_id': leaguetype_id})
+			if form.is_valid():
+				name = form.cleaned_data['league_name']
+				is_public = form.cleaned_data['league_is_public']
+				league_password = form.cleaned_data['league_password']
+
+				new_league = League(name=name, 
+					league_type=LeagueType.objects.get(pk=leaguetype_id),
+					league_password=league_password)
+				new_league.save()
+
+				new_league_session = LeagueSession(league=new_league)
+				new_league_session.save()
+				user_is_commissioner = True
+
+				add_user_to_league(user, new_league, user_is_commissioner)
+
+				return HttpResponseRedirect(reverse('fantasyworld:league_home',
+					args=(new_league.id,)))
+
+		else:
+			form = CreateLeagueForm()
+
+		return render(request, 'fantasyworld/league_create.html',
+			context={'form': form,
+					'leaguetype_id': leaguetype_id})
+
+	else:
+		return redirect('/login')
+
+
+def league_join_private(request, league_id):
+	league = League.objects.get(pk=league_id)
+
+	if request.method=='POST':
+		form = LeagueJoinPrivateForm(request.POST)
+
+		if form.is_valid():
+			league_password = form.cleaned_data['league_password']
+			if league_password == league.league_password:
+
+				user = request.user
+				if user.is_authenticated:
+					add_user_to_league(user, new_league, user_is_commissioner)
+
+					return HttpResponseRedirect(reverse('fantasyworld:league_home',
+						args=(league_id,)))
+				else:
+					return redirect('/login')
+
+			else:
+				return render(request,
+					'fantasyworld/league_join_private.html',
+					context={'form': form,
+							'league_id': league_id,
+							'already_tried_wrong_password': True})
+
+	else:
+		form = LeagueJoinPrivateForm()
+
+	return render(request, 'fantasyworld/league_join_private.html',
+		context={'form': form,
+				'league_id': league_id,
+				'already_tried_wrong_password': False})
+
 
 
 def league_join(request, league_id):
-	
 	'''first, get the league session.
 	but if it doesn't exist create one'''
 	
+	league = League.objects.get(pk=league_id)
+	if not league.is_public:
+		return HttpResponseRedirect(reverse('fantasyworld:league_join_private',
+			args=(league_id,)))
+
 	user = request.user
 	if user.is_authenticated:
-		try:
-			league_sessions = LeagueSession.objects.filter(league=league_id)
-			current_league_session = [ls for ls in league_sessions 
-										if ls.is_current_league_session][0]
-		except IndexError:
-			new_league_session = LeagueSession(league=League.objects.get(pk=league_id))
-			new_league_session.save()
-			current_league_session = new_league_session
-
-		profile = Profile.objects.filter(user=user)[0]
-
-		'''only one team per user per league'''
-		if Team.objects.filter(user=profile, league_session = current_league_session).count() <1:
-			team = Team.objects.create(user= profile,
-										league_session = current_league_session)
-			team.set_team_name()
-			team.save()
+		user_is_commissioner = False
+		add_user_to_league(user, league, user_is_commissioner)
 
 		return HttpResponseRedirect(reverse('fantasyworld:league_home',
 			args=(league_id,)))
 
 	else:
 		return redirect('/login')
+
 
 
 class LeagueView(generic.ListView):
@@ -289,6 +346,17 @@ def team_settings(request, team_id):
 				'league': league_session.league,
 				'user_is_commissioner': team.is_commissioner,
 				'form': form})
+
+
+'''Simple Pages'''
+
+def index(request):
+	leaguetype_list = LeagueType.objects.order_by('id')	
+	return render(request, 'fantasyworld/index.html')
+
+
+def how_to_play(request):
+	return render(request, 'fantasyworld/how_to_play.html')
 
 
 def league_categories(request):

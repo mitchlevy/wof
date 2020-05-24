@@ -10,12 +10,13 @@
 
 
 
-<h3> Public Leagues </h3>
+<h3> Join a League </h3>
 
 
-<table class="table table-striped" style="margin-top: 5px;">
+<table class="table table-striped table-sm" style="margin-top: 5px;">
   <thead>
     <tr>
+      <th scope="col"></th>
       <th scope="col">League </th>
       <th scope="col">Commissioner</th>
       <th scope="col">Number of Teams</th>
@@ -25,41 +26,31 @@
     {% for league in leagues %}
       {% if league.is_public %}
         <tr>
+        <th> Public </th>
         <th> <a href ="{% url 'fantasyworld:league_home' league.id %}">{{league.name}}</th>
-        <th> Me </th>
-        <th> 0 </th>
+        <th> ?? </th>
+        <th> ?? </th>
         </tr>
       {% endif %}
     {% endfor %}
-  </tbody>
-</table>
-
-<br>
-
-<h3> Private Leagues </h3>
-
-<table class="table table-striped" style="margin-top: 5px;">
-  <thead>
-    <tr>
-      <th scope="col">League </th>
-    </tr>
-  </thead>
-  <tbody>
     {% for league in leagues %}
       {% if not league.is_public %}
         <tr>
+        <th> Private </th>
         <th> <a href ="{% url 'fantasyworld:league_home' league.id %}">{{league.name}}</th>
-
+        <th> ?? </th>
+        <th> ?? </th>
         </tr>
       {% endif %}
-    {% endfor %}
+    {% endfor %}  
+
   </tbody>
 </table>
 
 <br>
 
 
-<a href= "{% url 'fantasyworld:league_create' leaguetype.id %}"> Create a New League </a>
+<a href= "{% url 'fantasyworld:league_create' leaguetype.id %}"> Or Create a New League </a>
 <br>
 
 {% endblock %}

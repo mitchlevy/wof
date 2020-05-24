@@ -25,7 +25,7 @@ class LeagueType(models.Model):
 	'''
 	name = models.CharField(max_length=100)
 	description = models.CharField(max_length = 500)
-	game_type = models.ManyToManyField(GameType)
+	game_type = models.ManyToManyField(GameType, default=None)
 	stock_types = models.CharField(max_length=1000, null=True)
 	how_to_play = models.CharField(max_length=3000, null=True)
 
@@ -50,6 +50,7 @@ class League(models.Model):
 	league_type = models.ForeignKey(LeagueType, on_delete=models.CASCADE)
 	name = models.CharField(max_length = 100)
 	is_public = models.BooleanField(default=False)
+	league_password = models.CharField(max_length = 100, null=True)
 
 	def __str__(self):
 		return self.name
@@ -113,7 +114,7 @@ class Team(models.Model):
 	budget = models.FloatField(default=100)
 
 	def set_team_name(self):
-		team_name = self.user.user.username + " Team"
+		team_name = self.user.user.username + "\'s Team"
 		self.team_name = team_name
 
 	def get_current_stock_quantity(self, stock):

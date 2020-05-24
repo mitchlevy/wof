@@ -211,10 +211,6 @@ body {
 
 
 
-tbody tr:nth-child(odd) {
-  background-color: #f2f2f2;
-}
-
 img {
   border: 3px solid #282c34;
 }
@@ -253,9 +249,6 @@ img {
   list-style-type: circle;
   margin-left: 2em;
 }
-
-
-
 
 /* CSS Hover */
 .dropbtn {

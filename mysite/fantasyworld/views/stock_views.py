@@ -42,20 +42,23 @@ def buy_stock(request, league_id, stock_id):
 
 	stock = Stock.objects.get(pk=stock_id)
 	profile = Profile.objects.get(user=request.user)
-	team = Team.objects.filter(user=profile, league_session=stock.league_session)[0]
+	league = League.objects.get(id=league_id)
+	league_session = LeagueSession.objects.get(
+		league=league,
+		is_current_league_session=True)
+	team = Team.objects.filter(
+		user=profile, 
+		league_session=league_session)[0]
 
 	'''check that stock belongs to the right league'''
 	try:
-		league = League.objects.get(id=league_id)
-		league_session = LeagueSession.objects.get(
-			league=league,
-			is_current_league_session=True)
-		if stock.league_session != league_session:
+		stock_set = stock.stock_set
+		if league_session not in stock_set.league_session.all():
 			return HttpResponseRedirect(reverse('fantasyworld:league_home',
 				args=(league_id,)))
-	except Exception:
-		return HttpResponseRedirect(reverse('fantasyworld:league_home',
-			args=(league_id,)))
+
+	except Exception as e:
+		return HttpResponse(e)
 
 
 	if request.method == 'POST':
@@ -82,15 +85,18 @@ def sell_stock(request, league_id, stock_id):
 
 	stock = Stock.objects.get(pk=stock_id)
 	profile = Profile.objects.get(user=request.user)
-	team = Team.objects.filter(user=profile, league_session=stock.league_session)[0]
+	league = League.objects.get(id=league_id)
+	league_session = LeagueSession.objects.get(
+		league=league,
+		is_current_league_session=True)
+	team = Team.objects.filter(
+		user=profile, 
+		league_session=league_session)[0]
 
 	'''check that stock belongs to the right league'''
 	try:
-		league = League.objects.get(id=league_id)
-		league_session = LeagueSession.objects.get(
-			league=league,
-			is_current_league_session=True)
-		if stock.league_session != league_session:
+		stock_set = stock.stock_set
+		if league_session not in stock_set.league_session.all():
 			return HttpResponseRedirect(reverse('fantasyworld:league_home',
 				args=(league_id,)))
 	except Exception:

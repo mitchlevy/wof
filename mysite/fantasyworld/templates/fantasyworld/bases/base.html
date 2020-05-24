@@ -38,9 +38,9 @@
                             <div class="dropdown">
                                 <button class="dropbtn">{{ user }}</button>
                                 <div class="dropdown-content">
-                                    <a href="#">How to Play</a>
-                                    <a href="#">My Leagues</a>
-                                    <a href="#">My Profile</a>
+                                    <a href="{% url 'fantasyworld:how_to_play'%}">How to Play</a>
+                                    <a href="{% url 'fantasyworld:profile'%}">My Leagues</a>
+                                    <a href="{% url 'fantasyworld:profile'%}">My Profile</a>
                                     <a href="{% url 'fantasyworld:logout'%}">Sign Out</a>
                                 </div>
                             </div>

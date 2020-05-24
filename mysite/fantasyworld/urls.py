@@ -6,6 +6,8 @@ from fantasyworld import views
 app_name = 'fantasyworld'
 urlpatterns = [
 	path('', views.index, name='index'),
+	path('how-to-play', views.how_to_play,
+		name='how_to_play'),
 	path('league-categories', views.league_categories, 
 		name='league_categories'),
 
@@ -23,7 +25,9 @@ urlpatterns = [
 		name='league_home'),
 	path('league/<int:league_id>/join/', views.league_join,
 		name='league_join'),
-	
+	path('league/<int:league_id>/join_private/', views.league_join_private,
+		name='league_join_private'),	
+
 	path('league/<int:league_id>/commissioner-tools/', views.commissioner_tools,
 		name='commissioner_tools'),
 

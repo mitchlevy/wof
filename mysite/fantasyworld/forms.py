@@ -25,3 +25,15 @@ class TeamSettingsForm(forms.Form):
 		max_length=100, 
 		required=False)
 	
+class CreateLeagueForm(forms.Form):
+	league_name=forms.CharField(label="League Name",
+		max_length=100)
+	league_is_public=forms.BooleanField(label="League is Public? ",
+		required=False)
+	league_password=forms.CharField(label="League Password",
+		max_length=100,
+		help_text="Leave this field blank if you're creating a public league")
+
+class LeagueJoinPrivateForm(forms.Form):
+	league_password=forms.CharField(label="Enter League Password",
+		max_length=100)

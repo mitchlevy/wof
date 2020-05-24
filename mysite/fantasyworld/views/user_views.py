@@ -52,7 +52,7 @@ def signup(request):
             login(request, user)
             profile = Profile(user=user)
             profile.save()
-            return redirect('')
+            return redirect('/index/')
         else:
             return render(request, 'fantasyworld/signup.html', {'form': form})
     else:
