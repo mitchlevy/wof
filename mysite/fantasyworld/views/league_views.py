@@ -56,8 +56,13 @@ def league_home(request, league_id):
 		return redirect('/login')
 
 	else:
-		league_session = LeagueSession.objects.get(league=league,
-			is_current_league_session=True)
+		try:
+			league_session = LeagueSession.objects.get(league=league,
+				is_current_league_session=True)
+		except DoesNotExist:
+			league_session = LeagueSession(league)
+			league_session.save()
+
 		teams = Team.objects.filter(league_session=league_session)
 
 		team = Team.objects.filter(league_session = league_session,
