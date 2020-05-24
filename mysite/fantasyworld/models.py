@@ -25,9 +25,9 @@ class LeagueType(models.Model):
 	'''
 	name = models.CharField(max_length=100)
 	description = models.CharField(max_length = 500)
-	game_type = models.ManyToManyField(GameType, default=None)
-	stock_types = models.CharField(max_length=1000, null=True)
-	how_to_play = models.CharField(max_length=3000, null=True)
+	game_type = models.ManyToManyField(GameType, default=None, blank=True)
+	stock_types = models.CharField(max_length=1000, null=True, blank=True)
+	how_to_play = models.CharField(max_length=3000, null=True, blank=True)
 
 	meta_leaguetype = models.ForeignKey('self', blank=True, null=True,
 		on_delete = models.SET_NULL, default=None)
@@ -50,7 +50,7 @@ class League(models.Model):
 	league_type = models.ForeignKey(LeagueType, on_delete=models.CASCADE)
 	name = models.CharField(max_length = 100)
 	is_public = models.BooleanField(default=False)
-	league_password = models.CharField(max_length = 100, null=True)
+	league_password = models.CharField(max_length = 100, null=True, blank=True)
 
 	def __str__(self):
 		return self.name
@@ -177,7 +177,7 @@ class Stock(models.Model):
 	price = models.FloatField()
 	transactions = models.ManyToManyField(Team, through = 'StockTransaction',
 		default=None)
-	description = models.CharField(max_length=1000, null=True)
+	description = models.CharField(max_length=1000, null=True, blank=True)
 
 	stock_type = models.CharField(max_length=100, default='Generic')
 
