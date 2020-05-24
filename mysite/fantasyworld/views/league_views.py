@@ -59,7 +59,7 @@ def league_home(request, league_id):
 		try:
 			league_session = LeagueSession.objects.get(league=league,
 				is_current_league_session=True)
-		except DoesNotExist:
+		except LeagueSession.DoesNotExist:
 			league_session = LeagueSession(league)
 			league_session.save()
 
