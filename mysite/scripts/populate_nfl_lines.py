@@ -10,13 +10,11 @@ from django.core.exceptions import ObjectDoesNotExist
 pc_nfl_lines_folder = '/Users/mitchelllevy/Desktop/_Misc/Google Drive/Projects/FantasyLife/data/NFL_Lines'
 pc_nfl_lines_league_id = 13
 
-heroku_nfl_lines_folder = '/Users/mitchelllevy/Desktop/_Misc/Google Drive/Projects/FantasyLife/data/NFL_Lines'
+heroku_nfl_lines_folder = '/app/mysite/fantasyworld/data'
 heroku_nfl_lines_league_id = 3
 
 nfl_lines_csv = 'NFL_Lines.Current.csv'
 nfl_lines_league_id = 13
-
-
 
 
 def populate_nfl_lines():
@@ -25,7 +23,7 @@ def populate_nfl_lines():
 	Adapt to whether script is running on heroku or locally
 	'''
 	cwd = os.getcwd()
-	
+
 	if cwd == '/app':
 		nfl_lines_folder = heroku_nfl_lines_folder
 		nfl_lines_league_id = heroku_nfl_lines_league_id
