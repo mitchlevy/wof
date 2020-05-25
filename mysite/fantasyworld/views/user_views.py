@@ -48,10 +48,13 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
+            
             user = authenticate(username=username, password=password)
-            login(request, user)
             profile = Profile(user=user)
             profile.save()
+
+            login(request, user)
+
             return redirect('/index/')
         else:
             return render(request, 'fantasyworld/signup.html', {'form': form})
