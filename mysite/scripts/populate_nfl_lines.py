@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 pc_nfl_lines_folder = '/Users/mitchelllevy/Desktop/_Misc/Google Drive/Projects/FantasyLife/data/NFL_Lines'
 pc_nfl_lines_league_id = 13
 
-heroku_nfl_lines_folder = '/app/mysite/fantasyworld/data'
+heroku_nfl_lines_folder = '/app/fantasyworld/data'
 heroku_nfl_lines_league_id = 3
 
 nfl_lines_csv = 'NFL_Lines.Current.csv'
@@ -30,6 +30,7 @@ def populate_nfl_lines():
 	else:
 		nfl_lines_folder = pc_nfl_lines_folder
 		nfl_lines_league_id = pc_nfl_lines_league_id
+		
 
 	f1 = open(os.path.join(nfl_lines_folder, nfl_lines_csv))
 	text = f1.read()
