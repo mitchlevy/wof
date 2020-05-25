@@ -6,12 +6,33 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 '''Settings that will need to be adjusted to work on the cloud'''
-nfl_lines_folder = '/Users/mitchelllevy/Desktop/_Misc/Google Drive/Projects/FantasyLife/data/NFL_Lines'
+
+pc_nfl_lines_folder = '/Users/mitchelllevy/Desktop/_Misc/Google Drive/Projects/FantasyLife/data/NFL_Lines'
+pc_nfl_lines_league_id = 13
+
+heroku_nfl_lines_folder = '/Users/mitchelllevy/Desktop/_Misc/Google Drive/Projects/FantasyLife/data/NFL_Lines'
+heroku_nfl_lines_league_id = 3
+
 nfl_lines_csv = 'NFL_Lines.Current.csv'
 nfl_lines_league_id = 13
 
 
+
+
 def populate_nfl_lines():
+
+	'''
+	Adapt to whether script is running on heroku or locally
+	'''
+	cwd = os.getcwd()
+	
+	if cwd == '/app':
+		nfl_lines_folder = heroku_nfl_lines_folder
+		nfl_lines_league_id = heroku_nfl_lines_league_id
+	else:
+		nfl_lines_folder = pc_nfl_lines_folder
+		nfl_lines_league_id = pc_nfl_lines_league_id
+
 	f1 = open(os.path.join(nfl_lines_folder, nfl_lines_csv))
 	text = f1.read()
 	f1.close()
