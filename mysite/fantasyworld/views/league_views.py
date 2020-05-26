@@ -127,10 +127,12 @@ def add_user_to_league(user, league_id,
 def league_create(request, leaguetype_id):
 
 	user = request.user
+	initial = {'leaguetype_id': leaguetype_id}
+
 	if user.is_authenticated:
 
 		if request.method=='POST':
-			form = CreateLeagueForm(request.POST)
+			form = CreateLeagueForm(request.POST, initial=initial)
 
 			if form.is_valid():
 				name = form.cleaned_data['league_name']
@@ -152,7 +154,7 @@ def league_create(request, leaguetype_id):
 					args=(new_league.id,)))
 
 		else:
-			form = CreateLeagueForm()
+			form = CreateLeagueForm(initial=initial)
 
 		return render(request, 'fantasyworld/league_create.html',
 			context={'form': form,

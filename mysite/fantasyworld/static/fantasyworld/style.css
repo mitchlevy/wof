@@ -1,7 +1,8 @@
  font-family: 'Titillium Web', sans-serif;
 
 .table-striped {
-  min-width: 100%;
+  width: 1px;
+  white-space: nowrap;
 }
 
 #wrapper {
@@ -40,6 +41,7 @@ th, tb {
 
 .th a {
   font-family: "Titillium Web";
+  font-size: 12px;
 }
 
 h1, h3, h5 {
@@ -59,7 +61,12 @@ body {
 .aligncenter {
   margin-left:4%;
   margin-right:4%;
+}
 
+.small-font a, th, tbody {
+  font-family: "Titillium Web";
+  font-size: 16px !important;
+  font-weight: normal;
 }
 
 .column { 
@@ -76,7 +83,7 @@ body {
   color: #3A2C2A;
   text-align: center;
   text-align: bottom;
-  font-size: 20px;
+  font-size: 17px;
 }
 
 .row {
@@ -117,6 +124,9 @@ body {
   float: right;
 }
 
+.table-no-whitespace {
+  width: auto;
+}
 
 .topnav {
   background-color: #648C70;

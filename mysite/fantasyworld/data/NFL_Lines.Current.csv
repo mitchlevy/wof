@@ -1,33 +1,65 @@
-Team,Win Projection
-Arizona Cardinals,7
-Atlanta Falcons,7.5
-Baltimore Ravens,11.5
-Buffalo Bills,9
-Carolina Panthers,5.5
-Chicago Bears,8
-Cincinnati Bengals,5.5
-Cleveland Browns,8.5
-Dallas Cowboys,9.5
-Denver Broncos,7.5
-Detroit Lions,6.5
-Green Bay Packers,9
-Houston Texans,8
-Indianapolis Colts,9
-Jacksonville Jaguars,5
-Kansas City Chiefs,11.5
-Las Vegas Raiders,7.5
-Los Angeles Chargers,8
-Los Angeles Rams,8.5
-Miami Dolphins,6.5
-Minnesota Vikings,9
-New England Patriots,9
-New Orleans Saints,10.5
-New York Giants,6.5
-New York Jets,7
-Philadelphia Eagles,9.5
-Pittsburgh Steelers,9.5
-San Francisco 49ers,10.5
-Seattle Seahawks,9.5
-Tampa Bay Buccaneers,10
-Tennessee Titans,8.5
-Washington Redskins,5.5
+Team,Price
+Arizona Cardinals to win over 7 games,0.5
+Atlanta Falcons to win over 8 games,0.5
+Baltimore Ravens to win over 12 games,0.5
+Buffalo Bills to win over 9 games,0.5
+Carolina Panthers to win over 6 games,0.5
+Chicago Bears to win over 8 games,0.5
+Cincinnati Bengals to win over 6 games,0.5
+Cleveland Browns to win over 9 games,0.5
+Dallas Cowboys to win over 10 games,0.5
+Denver Broncos to win over 8 games,0.5
+Detroit Lions to win over 7 games,0.5
+Green Bay Packers to win over 9 games,0.5
+Houston Texans to win over 8 games,0.5
+Indianapolis Colts to win over 9 games,0.5
+Jacksonville Jaguars to win over 5 games,0.5
+Kansas City Chiefs to win over 12 games,0.5
+Las Vegas Raiders to win over 8 games,0.5
+Los Angeles Chargers to win over 8 games,0.5
+Los Angeles Rams to win over 9 games,0.5
+Miami Dolphins to win over 7 games,0.5
+Minnesota Vikings to win over 9 games,0.5
+New England Patriots to win over 9 games,0.5
+New Orleans Saints to win over 11 games,0.5
+New York Giants to win over 7 games,0.5
+New York Jets to win over 7 games,0.5
+Philadelphia Eagles to win over 10 games,0.5
+Pittsburgh Steelers to win over 10 games,0.5
+San Francisco 49ers to win over 11 games,0.5
+Seattle Seahawks to win over 10 games,0.5
+Tampa Bay Buccaneers to win over 10 games,0.5
+Tennessee Titans to win over 9 games,0.5
+Washington Redskins to win over 6 games,0.5
+Arizona Cardinals to win under 7 games,0.5
+Atlanta Falcons to win under 8 games,0.5
+Baltimore Ravens to win under 12 games,0.5
+Buffalo Bills to win under 9 games,0.5
+Carolina Panthers to win under 6 games,0.5
+Chicago Bears to win under 8 games,0.5
+Cincinnati Bengals to win under 6 games,0.5
+Cleveland Browns to win under 9 games,0.5
+Dallas Cowboys to win under 10 games,0.5
+Denver Broncos to win under 8 games,0.5
+Detroit Lions to win under 7 games,0.5
+Green Bay Packers to win under 9 games,0.5
+Houston Texans to win under 8 games,0.5
+Indianapolis Colts to win under 9 games,0.5
+Jacksonville Jaguars to win under 5 games,0.5
+Kansas City Chiefs to win under 12 games,0.5
+Las Vegas Raiders to win under 8 games,0.5
+Los Angeles Chargers to win under 8 games,0.5
+Los Angeles Rams to win under 9 games,0.5
+Miami Dolphins to win under 7 games,0.5
+Minnesota Vikings to win under 9 games,0.5
+New England Patriots to win under 9 games,0.5
+New Orleans Saints to win under 11 games,0.5
+New York Giants to win under 7 games,0.5
+New York Jets to win under 7 games,0.5
+Philadelphia Eagles to win under 10 games,0.5
+Pittsburgh Steelers to win under 10 games,0.5
+San Francisco 49ers to win under 11 games,0.5
+Seattle Seahawks to win under 10 games,0.5
+Tampa Bay Buccaneers to win under 10 games,0.5
+Tennessee Titans to win under 9 games,0.5
+Washington Redskins to win under 6 games,0.5

@@ -72,7 +72,7 @@ def buy_stock(request, league_id, stock_id):
 				bought_stock=True, 
 				sold_stock=False)
 
-			return redirect('/team/' + str(team.id))
+			return redirect('/team/portfolio/' + str(team.id))
 	else:
 		form = BuyStockForm()
 
@@ -114,7 +114,7 @@ def sell_stock(request, league_id, stock_id):
 				quantity=quantity,
 				bought_stock=False, 
 				sold_stock=True)
-			return redirect('/team/' + str(team.id))
+			return redirect('/team/portfolio/' + str(team.id))
 	else:
 		form = SellStockForm()
 

@@ -154,13 +154,18 @@ class StockSet(models.Model):
 	Might need to eventually build sub/supersetting to get the right level
 	of specificity
 	'''
+	def __str__(self):
+		return self.name
+		
 	name = models.CharField(max_length=200, default="Default Stock Set")
 	description=models.CharField(max_length=1000, null=True)
 
-	league_session = models.ManyToManyField(LeagueSession, default=None)
+	league_session = models.ManyToManyField(LeagueSession, 
+		default=None, blank=True)
 	superset_stockset = models.ForeignKey('self', blank=True, null=True,
 		on_delete = models.SET_NULL, default=None)
-
+	league_type = models.ManyToManyField(LeagueType, 
+		default=None, blank=True)
 
 
 class Stock(models.Model):

@@ -5,31 +5,63 @@
 
 <h1>{{team.team_name}}</h1>
 
- <h3> My Portfolio </h3>
- <br>
-  <table class="table table-striped" style="margin-top: 5px;">
-  	<thead>
-  		<th scope="col">Cash </th>
-  		<th scope="col">{{team.budget}}</th>
-  	</thead>
-  	<thead>
-  		<th scope="col">Portfolio Value </th>
-  		<th scope="col">{{noncash_portfolio_value}}</th>
-  	</thead>
-  	<thead>
-  		<th scope="col">Current Rank </th>
-  		<th scope="col">1/2</th>
-  	</thead>
-  </table>
-  <br>
-  
-  {% if teams_stocks %}
-  <table class="table table-striped" style="margin-top: 5px;">
+<div class="row">
+  <div class="small-font column">
+    <h3> My Bankroll </h3>
+    <table class="table table-striped" style="margin-top: 5px;">
+      <thead>
+        <th scope="col">Cash on Hand</th>
+        <th scope="col">{{team.budget}}</th>
+      </thead>
+      <thead>
+        <th scope="col">Wagers Value </th>
+        <th scope="col">{{noncash_portfolio_value}}</th>
+      </thead>
+      <thead>
+        <th scope="col">Total Bankroll </th>
+        <th scope="col">{{noncash_portfolio_value|add:team.budget}}</th>
+      </thead>
+      <thead>
+        <th scope="col">League Ranking </th>
+        <th scope="col">1/2</th>
+      </thead>
+    </table>
+  </div>
+  <div class="small-font column">  
+    {% if teams_stocks %}  
+    <h3> My Portfolio </h3>
+    <table class="table table-striped table-bordered table-sm" style="margin-top: 5px;">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Shares</th>
+          <th scope="col">Current Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stock, current_quantity in teams_stocks.items %}
+          {% if current_quantity > 0 %}
+            <tr>
+            <th> <a href="{% url 'fantasyworld:stock_detail' stock.id %}">{{stock.name}} </a></th>
+            <th> {{current_quantity}} </th>
+            <th> {{stock.price}} </th>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+</div>
+<br>
+
+{% if teams_stocks %}
+ <h3> Available Bets </h3>
+  <table class="table table-striped table-bordered table-sm" style="margin-top: 5px;">
     <thead>
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
-        <th scope="col">Current Shares</th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>
@@ -37,17 +69,15 @@
     <tbody>
       {% for stock, current_quantity in teams_stocks.items %}
         <tr>
-        <th> <a href="{% url 'fantasyworld:stock_detail' stock.id %}">{{stock.name}} </a></th>
-        <th> {{stock.price}} </th>
-        <th> {{current_quantity}} </th>
-        <th> <a href="{% url 'fantasyworld:buy_stock' league.id stock.id %}">Buy</a> </th>
-        <th> <a href="{% url 'fantasyworld:sell_stock' league.id stock.id %}">Sell</a> </th>
+        <td class="table-no-whitespace"> <a href="{% url 'fantasyworld:stock_detail' stock.id %}">{{stock.name}} </a></td>
+        <td> {{stock.price}} </td>
+        <td> <a href="{% url 'fantasyworld:buy_stock' league.id stock.id %}">Buy</a> </td>
+        <td> <a href="{% url 'fantasyworld:sell_stock' league.id stock.id %}">Sell</a> </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 
   {% endif %}
-
 
 {% endblock %}
