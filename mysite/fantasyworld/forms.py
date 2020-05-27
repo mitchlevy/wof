@@ -30,7 +30,7 @@ class CreateLeagueForm(forms.Form):
 
 	def __init__(self, *args, **kwargs):
 		super(CreateLeagueForm, self).__init__(*args, **kwargs)
-		self.fields['stock sets'] = forms.ModelMultipleChoiceField(
+		self.fields['stock_sets'] = forms.ModelMultipleChoiceField(
 			queryset=m.StockSet.objects.filter(
 			league_type__id=self.initial['leaguetype_id']))
 
@@ -40,7 +40,8 @@ class CreateLeagueForm(forms.Form):
 		required=False)
 	league_password=forms.CharField(label="League Password",
 		max_length=100,
-		help_text="Leave this field blank if you're creating a public league")
+		help_text="Leave this field blank if you're creating a public league",
+		required=False)
 
 
 

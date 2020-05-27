@@ -10,10 +10,12 @@ from django.core.exceptions import ObjectDoesNotExist
 pc_nfl_lines_folder = '/Users/mitchelllevy/Desktop/_Misc/Google Drive/Projects/FantasyLife/django_v1/mysite/fantasyworld/data'
 pc_nfl_lines_league_id = 13
 pc_nfl_lines_leaguetype_id = 7
+pc_nfl_lines_stockset_id = 7
 
 heroku_nfl_lines_folder = '/app/fantasyworld/data'
 heroku_nfl_lines_league_id = 2
 heroku_nfl_lines_leaguetype_id = 3
+heroku_nfl_lines_stockset_id = 1
 
 nfl_lines_csv = 'NFL_Lines.Current.csv'
 nfl_lines_league_id = 13
@@ -25,59 +27,43 @@ def populate_nfl_lines():
 	Adapt to whether script is running on heroku or locally
 	'''
 	cwd = os.getcwd()
-
 	if cwd == '/app':
 		nfl_lines_folder = heroku_nfl_lines_folder
-		nfl_lines_league_id = heroku_nfl_lines_league_id
-		nfl_lines_leaguetype_id = heroku_nfl_lines_leaguetype_id
+		nfl_lines_stockset_id = heroku_nfl_lines_stockset_id
+
 	else:
 		nfl_lines_folder = pc_nfl_lines_folder
-		nfl_lines_league_id = pc_nfl_lines_league_id
-		nfl_lines_leaguetype_id = pc_nfl_lines_leaguetype_id
+		nfl_lines_stockset_id = pc_nfl_lines_stockset_id
 
+	stock_set = m.StockSet.objects.get(pk=nfl_lines_stockset_id)
+	stocks = m.Stock.objects.filter(stock_set = stock_set)
+
+	'''read in NFL Lines data'''
 	f1 = open(os.path.join(nfl_lines_folder, nfl_lines_csv))
 	text = f1.read()
 	f1.close()
+	
+	nfl_team_lines_dict = {}
+	for nfl_team_line in text.split('\n')[1:]:
+		nfl_team, line = nfl_team_line.split(',')
+		nfl_team_lines_dict[nfl_team] = line
 
-	team_lines_dict = {}
-	for team_line in text.split('\n')[1:]:
-		team, line = team_line.split(',')
-		team_lines_dict[team] = line
+	nfl_teams = nfl_team_lines_dict.keys()
+	
 
-
-	teams = team_lines_dict.keys()
-
-	league_type = m.LeagueType.objects.get(pk=nfl_lines_leaguetype_id)
-	leagues = m.League.objects.filter(league_type=league_type)
-
-	for league in leagues:
-		league_session = m.LeagueSession.objects.get(
-			league=league, 
-			is_current_league_session=True)
-
+	'''update stocks to correspond to new data'''
+	for nfl_team in nfl_teams:
 		try:
-			stock_set = m.StockSet.objects.get(league_session=league_session)	
-		except Exception:
-			stock_set = m.StockSet(name='NFL Lines', 
-				description='2020 NFL Season Win Lines')
-			stock_set.save()
-			stock_set.league_session.add(league_session)
-			stock_set.save()
+			nfl_team_stock = stocks.get(name = nfl_team)
+			nfl_team_stock.price = nfl_team_lines_dict[nfl_team]
+			nfl_team_stock.save()
 
-		stocks = m.Stock.objects.filter(stock_set = stock_set)
-		
-		for team in teams:
-			try:
-				team_stock = stocks.get(name = team)
-				team_stock.price = team_lines_dict[team]
-				team_stock.save()
-
-			except ObjectDoesNotExist:
-				team_stock = m.Stock(
-					stock_set = stock_set,
-					name = team,
-					price = team_lines_dict[team])
-				team_stock.save()
+		except ObjectDoesNotExist:
+			nfl_team_stock = m.Stock(
+				stock_set = stock_set,
+				name = nfl_team,
+				price = nfl_team_lines_dict[nfl_team])
+			nfl_team_stock.save()
 
 def run():
 	populate_nfl_lines()

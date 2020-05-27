@@ -138,6 +138,7 @@ def league_create(request, leaguetype_id):
 				name = form.cleaned_data['league_name']
 				is_public = form.cleaned_data['league_is_public']
 				league_password = form.cleaned_data['league_password']
+				stock_sets = form.cleaned_data['stock_sets']
 
 				new_league = League(name=name, 
 					league_type=LeagueType.objects.get(pk=leaguetype_id),
@@ -147,6 +148,10 @@ def league_create(request, leaguetype_id):
 				new_league_session = LeagueSession(league=new_league)
 				new_league_session.save()
 				user_is_commissioner = True
+
+				for stock_set in stock_sets:
+					stock_set.league_session.add(new_league_session)
+					stock_set.save()
 
 				add_user_to_league(user, new_league, user_is_commissioner)
 
